@@ -58,23 +58,48 @@ public class pylos_AI {
 				if (layer_1[i][j] == 1) System.out.print("w ");
 				else if (layer_1[i][j] == 2) System.out.print("b ");
 				else System.out.print("o ");
+			}
 
-				System.out.print("    ");
+			System.out.print("    ");
 
-				if (i<3 && j<3) {
-					if (layer_2[i][j] == 1) System.out.print("w ");
-					else if (layer_2[i][j] == 2) System.out.print("b ");
-					else System.out.print("o ");
+			if (i<3) {
+				for (int j = 0; j<3; j++) {
+						if (layer_2[i][j] == 1) System.out.print("w ");
+						else if (layer_2[i][j] == 2) System.out.print("b ");
+						else System.out.print("o ");
 				}
+			}
 
-				if (i<2 && j<2) {
+			System.out.print("    ");
+
+			if (i<2) {
+				for (int j=0; j<2; j++) {
 					if (layer_3[i][j] == 1) System.out.print("w ");
 					else if (layer_3[i][j] == 2) System.out.print("b ");
 					else System.out.print("o ");
 				}
 			}
+
+			System.out.print("    ");
+
+			if(i==0){
+				if (layer_4 == 1) System.out.print("w ");
+				else if (layer_4 == 2) System.out.print("b ");
+				else System.out.print("o ");
+			}
+			System.out.println();
 		}
 
+		System.out.println();
+		System.out.print("Balls remaining: WHITE: " + white_balls + ", BLACK: " + black_balls);
+		System.out.println(newLine);
+		System.out.println("Some algorithm statistics here: ");
+		System.out.println();
+	}
+
+	public void makeMove() {
+		//Here we manually enter the coordinates for the move.
+		//Then based on player type we either do run Minimax (in case of AI's move) or we do not (in case of Human move - just place the ball)
 	}
 
 	public int minimax(int alpha, int beta, int maxDepth, int playertype) { 
@@ -83,5 +108,9 @@ public class pylos_AI {
 		long endTime = System.nanoTime();
 		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
 		return 0;
+	}
+
+	public void checkwin() {
+		//Check for wining combinations here
 	}
 }
