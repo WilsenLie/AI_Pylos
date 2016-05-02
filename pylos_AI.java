@@ -31,7 +31,9 @@ public class pylos_AI {
 
 	public static void main(String[] args) {
 		pylos_AI instance = new pylos_AI();
+		instance.greeting();
 		instance.drawBoard();
+		instance.makeMove();
 		/*
 			while(win == false) {
 				drawBoard();
@@ -39,6 +41,18 @@ public class pylos_AI {
 				checkwin();
 			}
 		 */	
+	}
+
+	public void greeting() {
+		System.out.println("This is the terminal based AI for pylos game implemented using" + "\n" + "Minimax algorithm with alpha beta pruning.");
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Please choose who will make the move first (1-AI, 2-You): ");
+		playertype = keyboard.nextInt();
+		System.out.println("playertype: " + playertype);
+		while(playertype!=1 && playertype!=2) {
+			System.out.println("Wrong input! Try again: ");
+			playertype = keyboard.nextInt();
+		}
 	}
 
 	public void drawBoard() {
@@ -98,6 +112,12 @@ public class pylos_AI {
 	}
 
 	public void makeMove() {
+		System.out.println("Please make a move in the followin format: \n The bottom tier is squares: [a,b,c,d][1-4], \n The second tier up is squares: [e,f,g][1-3], \n The third tier up is squares: [h,i][1-2], \n The top tier is square j1.");
+		Scanner keyboard = new Scanner(System.in);
+		System.out.println("Your move: ");
+		String move = keyboard.next();
+		System.out.println(move);
+
 		//Here we manually enter the coordinates for the move.
 		//Then based on player type we either do run Minimax (in case of AI's move) or we do not (in case of Human move - just place the ball)
 	}
