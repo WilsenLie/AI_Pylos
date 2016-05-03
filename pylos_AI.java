@@ -167,7 +167,13 @@ public class pylos_AI {
 		return 0;
 	}
 	
-	public void checkwin() {
-		//Check for wining combinations here
+	public boolean checkwin() {
+		//Check for wining here - it is either when one of the players has no balls left or the one who put his ball on top of the pyramid
+		if (black_balls==0 || white_balls==0) {
+			return true;
+		}
+		if (layer_4!=0) return true;
+
+		return false;
 	}
 }
