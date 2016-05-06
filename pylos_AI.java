@@ -139,10 +139,10 @@ public class pylos_AI {
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
-			isLine(2,move);
+			if (isLine(playertype, move) || isSquare(playertype, move)) {
+				//remove balls here
+			}
 		}
-		
-		
 		
 		//Here we manually enter the coordinates for the move.
 		//Then based on player type we either do run Minimax (in case of AI's move) or we do not (in case of Human move - just place the ball)
@@ -157,40 +157,112 @@ public class pylos_AI {
 		//There are 14 possible squares (4x4, 3x3, 2x2)
 		//We don't need to check the whole board
 		//Just check after the last move and surround
-		System.out.println(rows2[1][1]);
-		System.out.println(currentMove.charAt(0));
+		char tempRow = currentMove.charAt(0);
+		int tempCol = Character.getNumericValue(currentMove.charAt(1))-1;
+		int findTier =  Arrays.binarySearch(rows, tempRow);
+		if (findTier >=0 && findTier <=3) { //1st tier
+			int temp = tempRow - 97; //97 is an int value of char 'a'
+			
+			//Top left corner
+			if (temp-1 >= 0 && tempCol-1 >= 0) {
+				if (layer_1[temp-1][tempCol-1] == whichPlayer && layer_1[temp-1][tempCol] == whichPlayer && layer_1[temp][tempCol-1] == whichPlayer) {
+					return true;
+				}
+			}
+			//top right corner
+			else if (temp-1 >= 0 && tempCol+1 <= 3) {
+				if (layer_1[temp-1][tempCol+1] == whichPlayer && layer_1[temp-1][tempCol] == whichPlayer && layer_1[temp][tempCol+1] == whichPlayer) {
+					return true;
+				}
+			}
+			//bottom left corner
+			else if (temp+1 <= 3 && tempCol-1 >= 0) {
+				if (layer_1[temp+1][tempCol-1] == whichPlayer && layer_1[temp+1][tempCol] == whichPlayer && layer_1[temp][tempCol-1] == whichPlayer) {
+					return true;
+				}
+			}
+			//bottom right corner
+			else if (temp+1 <= 3 && tempCol+1 <= 3) {
+				if (layer_1[temp+1][tempCol+1] == whichPlayer && layer_1[temp+1][tempCol] == whichPlayer && layer_1[temp][tempCol+1] == whichPlayer) {
+					return true;
+				}
+			}
+		}
 		
-		
-		
-		return true;
+		else { //2nd tier
+			int temp = tempRow - 101; //101 is an int value of char 'e'
+			
+			//Top left corner
+			if (temp-1 >= 0 && tempCol-1 >= 0) {
+				if (layer_2[temp-1][tempCol-1] == whichPlayer && layer_2[temp-1][tempCol] == whichPlayer && layer_2[temp][tempCol-1] == whichPlayer) {
+					return true;
+				}
+			}
+			//top right corner
+			else if (temp-1 >= 0 && tempCol+1 <= 2) {
+				if (layer_2[temp-1][tempCol+1] == whichPlayer && layer_2[temp-1][tempCol] == whichPlayer && layer_2[temp][tempCol+1] == whichPlayer) {
+					return true;
+				}
+			}
+			//bottom left corner
+			else if (temp+1 <= 2 && tempCol-1 >= 0) {
+				if (layer_2[temp+1][tempCol-1] == whichPlayer && layer_2[temp+1][tempCol] == whichPlayer && layer_2[temp][tempCol-1] == whichPlayer) {
+					return true;
+				}
+			}
+			//bottom right corner
+			else if (temp+1 <= 2 && tempCol+1 <= 2) {
+				if (layer_2[temp+1][tempCol+1] == whichPlayer && layer_2[temp+1][tempCol] == whichPlayer && layer_2[temp][tempCol+1] == whichPlayer) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public boolean isLine(int whichPlayer, String currentMove) {
 		//There are 14 possible lines
 		char tempRow = currentMove.charAt(0);
 		int tempCol = Character.getNumericValue(currentMove.charAt(1))-1;
+		int i = 0;
+		boolean hor = true;
+		boolean ver = true;
 		
 		int findTier =  Arrays.binarySearch(rows, tempRow);
 		if (findTier >=0 && findTier <=3) {
 			//in 1st tier 4x4
 			int temp = tempRow - 97; //97 is an int value of char 'a'
-			for (int i=0; i<4; i++) { //horizontal
+			for (i=0; i<4; i++) { //horizontal
 				if (layer_1[temp][i] != whichPlayer) {
-					return false;
+					hor = false;
+					break;
 				}
 			}
-			for (int i=0; i<4; i++) { //vertical
+			for (i=0; i<4; i++) { //vertical
 				if (layer_1[(temp+i)%4][tempCol] != whichPlayer) {
-					return false;
+					ver = false;
+					break;
 				}
 			}
-			return true;
+			return (hor || ver);
 		}
 		else {
 			//in 2nd tier 3x3
-			
+			int temp = tempRow - 101; //101 is an int value of char 'e'
+			for (i=0; i<3; i++) { //horizontal
+				if (layer_2[temp][i] != whichPlayer) {
+					hor = false;
+					break;
+				}
+			}
+			for (i=0; i<3; i++) { //vertical
+				if (layer_2[(temp+i)%3][tempCol] != whichPlayer) {
+					ver = false;
+					break;
+				}
+			}
+			return (hor || ver);
 		}
-		return true;
 	}
 	
 	public int minimax(int alpha, int beta, int maxDepth, int playertype) { 
@@ -204,4 +276,4 @@ public class pylos_AI {
 	public void checkwin() {
 		//Check for wining combinations here
 	}
-}
+}	
