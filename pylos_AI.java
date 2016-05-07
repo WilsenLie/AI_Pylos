@@ -8,12 +8,14 @@ import java.util.*;
 import java.io.*;
 
 public class pylos_AI {
+
+	public static Board board = new Board();
 	
 	//global variables here
 	int white_balls = 15;
 	int black_balls = 15;
 	
-	int playertype = 0;
+	public static int currentPlayer;
 	
 	String moveType = "add";
 	
@@ -21,11 +23,6 @@ public class pylos_AI {
 	int position = 20;
 	
 	boolean win = false;
-	
-	int[][] layer_1 = new int[4][4];
-	int[][] layer_2 = new int[3][3];
-	int[][] layer_3 = new int[2][2];
-	int layer_4 = 0;
 	
 	long duration = 0; //The timing of the AI's move
 	
@@ -42,6 +39,12 @@ public class pylos_AI {
 			}
 		*/	
 	}
+
+	public static void changePlayer() {
+		if (currentPlayer == 1) 
+				currentPlayer = 2;
+		else currentPlayer = 1;
+	}
 	
 	public void greeting() {
 		System.out.println("This is the terminal based AI for pylos game implemented using" + "\n" + "Minimax algorithm with alpha beta pruning.");
@@ -56,8 +59,8 @@ public class pylos_AI {
 				continue;
 			}
 			else {
-				playertype = keyboard.nextInt();
-				if(playertype!=1 && playertype!=2) { 
+				currentPlayer = keyboard.nextInt();
+				if(currentPlayer!=1 && currentPlayer!=2) { 
 					System.out.println("Wrong input! Try again: ");
 				}
 				else {
@@ -65,7 +68,7 @@ public class pylos_AI {
 				}
 			}
 		}
-		System.out.println("playertype: " + playertype);
+		System.out.println("currentPlayer: " + currentPlayer);
 	}
 	
 	public void drawBoard() {
@@ -79,49 +82,8 @@ public class pylos_AI {
 		System.out.println("Move: {type: " + moveType + ", position: " + position + ", color: " + color + "}");
 		System.out.println("Time: " + duration);
 		System.out.println();
-		
-		
-		for (int i = 0; i<4; i++) {
-			
-			//4x4
-			for (int j = 0; j<4; j++) {
-				if (layer_1[i][j] == 1) System.out.print("w ");
-				else if (layer_1[i][j] == 2) System.out.print("b ");
-				else System.out.print("o ");
-			}
-			
-			System.out.print("    ");
-			
-			//3x3
-			if (i<3) {
-				for (int j = 0; j<3; j++) {
-					if (layer_2[i][j] == 1) System.out.print("w ");
-					else if (layer_2[i][j] == 2) System.out.print("b ");
-					else System.out.print("o ");
-				}
-			}
-			
-			System.out.print("    ");
-			
-			//2x2
-			if (i<2) {
-				for (int j=0; j<2; j++) {
-					if (layer_3[i][j] == 1) System.out.print("w ");
-					else if (layer_3[i][j] == 2) System.out.print("b ");
-					else System.out.print("o ");
-				}
-			}
-			
-			System.out.print("    ");
-			
-			//Top of pyramid
-			if(i==0){
-				if (layer_4 == 1) System.out.print("w ");
-				else if (layer_4 == 2) System.out.print("b ");
-				else System.out.print("o ");
-			}
-			System.out.println();
-		}
+
+		board.showBoard();
 		
 		System.out.println();
 		System.out.print("Balls remaining: WHITE: " + white_balls + ", BLACK: " + black_balls);
@@ -139,13 +101,15 @@ public class pylos_AI {
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
-			if (isLine(playertype, move) || isSquare(playertype, move)) {
+			if (isLine(currentPlayer, move) || isSquare(currentPlayer, move)) {
 				//remove balls here
 			}
 		}
 		
 		//Here we manually enter the coordinates for the move.
 		//Then based on player type we either do run Minimax (in case of AI's move) or we do not (in case of Human move - just place the ball)
+		changePlayer();
+
 	}
 	
 	//For isSquare() and isLine()
@@ -165,25 +129,25 @@ public class pylos_AI {
 			
 			//Top left corner
 			if (temp-1 >= 0 && tempCol-1 >= 0) {
-				if (layer_1[temp-1][tempCol-1] == whichPlayer && layer_1[temp-1][tempCol] == whichPlayer && layer_1[temp][tempCol-1] == whichPlayer) {
+				if (board.tier1_board[temp-1][tempCol-1] == whichPlayer && board.tier1_board[temp-1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//top right corner
 			else if (temp-1 >= 0 && tempCol+1 <= 3) {
-				if (layer_1[temp-1][tempCol+1] == whichPlayer && layer_1[temp-1][tempCol] == whichPlayer && layer_1[temp][tempCol+1] == whichPlayer) {
+				if (board.tier1_board[temp-1][tempCol+1] == whichPlayer && board.tier1_board[temp-1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom left corner
 			else if (temp+1 <= 3 && tempCol-1 >= 0) {
-				if (layer_1[temp+1][tempCol-1] == whichPlayer && layer_1[temp+1][tempCol] == whichPlayer && layer_1[temp][tempCol-1] == whichPlayer) {
+				if (board.tier1_board[temp+1][tempCol-1] == whichPlayer && board.tier1_board[temp+1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom right corner
 			else if (temp+1 <= 3 && tempCol+1 <= 3) {
-				if (layer_1[temp+1][tempCol+1] == whichPlayer && layer_1[temp+1][tempCol] == whichPlayer && layer_1[temp][tempCol+1] == whichPlayer) {
+				if (board.tier1_board[temp+1][tempCol+1] == whichPlayer && board.tier1_board[temp+1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
@@ -194,25 +158,25 @@ public class pylos_AI {
 			
 			//Top left corner
 			if (temp-1 >= 0 && tempCol-1 >= 0) {
-				if (layer_2[temp-1][tempCol-1] == whichPlayer && layer_2[temp-1][tempCol] == whichPlayer && layer_2[temp][tempCol-1] == whichPlayer) {
+				if (board.tier2_board[temp-1][tempCol-1] == whichPlayer && board.tier2_board[temp-1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//top right corner
 			else if (temp-1 >= 0 && tempCol+1 <= 2) {
-				if (layer_2[temp-1][tempCol+1] == whichPlayer && layer_2[temp-1][tempCol] == whichPlayer && layer_2[temp][tempCol+1] == whichPlayer) {
+				if (board.tier2_board[temp-1][tempCol+1] == whichPlayer && board.tier2_board[temp-1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom left corner
 			else if (temp+1 <= 2 && tempCol-1 >= 0) {
-				if (layer_2[temp+1][tempCol-1] == whichPlayer && layer_2[temp+1][tempCol] == whichPlayer && layer_2[temp][tempCol-1] == whichPlayer) {
+				if (board.tier2_board[temp+1][tempCol-1] == whichPlayer && board.tier2_board[temp+1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom right corner
 			else if (temp+1 <= 2 && tempCol+1 <= 2) {
-				if (layer_2[temp+1][tempCol+1] == whichPlayer && layer_2[temp+1][tempCol] == whichPlayer && layer_2[temp][tempCol+1] == whichPlayer) {
+				if (board.tier2_board[temp+1][tempCol+1] == whichPlayer && board.tier2_board[temp+1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
@@ -233,13 +197,13 @@ public class pylos_AI {
 			//in 1st tier 4x4
 			int temp = tempRow - 97; //97 is an int value of char 'a'
 			for (i=0; i<4; i++) { //horizontal
-				if (layer_1[temp][i] != whichPlayer) {
+				if (board.tier1_board[temp][i] != whichPlayer) {
 					hor = false;
 					break;
 				}
 			}
 			for (i=0; i<4; i++) { //vertical
-				if (layer_1[(temp+i)%4][tempCol] != whichPlayer) {
+				if (board.tier1_board[(temp+i)%4][tempCol] != whichPlayer) {
 					ver = false;
 					break;
 				}
@@ -250,13 +214,13 @@ public class pylos_AI {
 			//in 2nd tier 3x3
 			int temp = tempRow - 101; //101 is an int value of char 'e'
 			for (i=0; i<3; i++) { //horizontal
-				if (layer_2[temp][i] != whichPlayer) {
+				if (board.tier2_board[temp][i] != whichPlayer) {
 					hor = false;
 					break;
 				}
 			}
 			for (i=0; i<3; i++) { //vertical
-				if (layer_2[(temp+i)%3][tempCol] != whichPlayer) {
+				if (board.tier2_board[(temp+i)%3][tempCol] != whichPlayer) {
 					ver = false;
 					break;
 				}
@@ -265,7 +229,7 @@ public class pylos_AI {
 		}
 	}
 	
-	public int minimax(int alpha, int beta, int maxDepth, int playertype) { 
+	public int minimax(int alpha, int beta, int maxDepth, int currentPlayer) { 
 		long startTime = System.nanoTime();
 		//TODO here
 		long endTime = System.nanoTime();
@@ -278,7 +242,7 @@ public class pylos_AI {
 		if (black_balls==0 || white_balls==0) {
 			return true;
 		}
-		if (layer_4!=0) return true;
+		if (board.tier_4!=0) return true;
 
 		return false;
 	}
