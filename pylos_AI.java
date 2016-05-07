@@ -109,6 +109,7 @@ public class pylos_AI {
 		String move = keyboard.next();
 		int[] translated_move = board.transCoordinate(move);
 		board.insert(translated_move, currentPlayer);
+		updateRemovable(translated_move, currentPlayer);
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
@@ -124,6 +125,58 @@ public class pylos_AI {
 	
 	//For isSquare() and isLine()
 	char[] rows = {'a', 'b', 'c', 'd','e','f','g','h','i','j'};
+	int[] removable = new int[29];
+	
+	//0 for non-removable
+	//1 for removable by player 1, 2 for removable by player 2
+	public void updateRemovable(int[] currentMove, int whichPlayer) {
+		if (currentMove[0] == 1) {
+			removable[coordToInt(currentMove[0], currentMove[1], currentMove[2])] = whichPlayer;
+		}
+		else if (currentMove[0] == 2) {
+			int temp = coordToInt(currentMove[0], currentMove[1], currentMove[2]);
+			removable[temp] = whichPlayer;
+			
+			//if ball is in 2nd tier, 4 balls below it cannot be removed
+			int[] temp2 = {(temp-16)/3, (temp-16)%3}; //back to coordinates
+			removable[coordToInt(1,temp2[0], temp2[1])] = 0;
+			removable[coordToInt(1,temp2[0]+1, temp2[1])] = 0;
+			removable[coordToInt(1,temp2[0], temp2[1]+1)] = 0;
+			removable[coordToInt(1,temp2[0]+1, temp2[1]+1)] = 0;
+		}
+		else if (currentMove[0] == 3) {
+			int temp = coordToInt(currentMove[0], currentMove[1], currentMove[2]);
+			removable[temp] = whichPlayer;
+			
+			//if ball is in 3rd tier, 4 balls below it cannot be removed
+			int[] temp2 = {(temp-25)/2, (temp-25)%2}; //back to coordinates
+			removable[coordToInt(2,temp2[0], temp2[1])] = 0;
+			removable[coordToInt(2,temp2[0]+1, temp2[1])] = 0;
+			removable[coordToInt(2,temp2[0], temp2[1]+1)] = 0;
+			removable[coordToInt(2,temp2[0]+1, temp2[1]+1)] = 0;
+		}
+	}
+	
+	private int coordToInt (int z, int x, int y) {
+		//x = row
+		//y = col
+		//z = which tier
+		
+		if (z==1) {
+			return ((x*4) + y);
+		}
+		else if (z==2) {
+			return (16 + (x*3) + y);
+		}
+		else if (z==3) {
+			return (25+(x*2)+y);
+		}
+		else {
+			return 29;
+		}
+	}
+	
+	
 	
 	public boolean isSquare(int whichPlayer, String currentMove) {
 		//There are 14 possible squares (4x4, 3x3, 2x2)
