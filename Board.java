@@ -1,3 +1,6 @@
+import java.util.*;
+import java.io.*;
+
 public class Board{
 	public final int tier1_dim = 4;
 	public final int tier2_dim = 3;
@@ -84,7 +87,7 @@ public class Board{
 				tier3_board[pos[1]][pos[2]] = whichPlayer;
 				break;
 			case 4 :
-				tier4 = whichPlayer;
+				tier_4 = whichPlayer;
 				break;
 			default :
 				System.out.println ("error");

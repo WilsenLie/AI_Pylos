@@ -22,7 +22,7 @@ public class pylos_AI {
 	String color = "white";
 	int position = 20;
 	
-	boolean win = false;
+	public static boolean win = false;
 	
 	long duration = 0; //The timing of the AI's move
 	
@@ -30,14 +30,9 @@ public class pylos_AI {
 		pylos_AI instance = new pylos_AI();
 		instance.greeting();
 		instance.drawBoard();
-		instance.makeMove();
-		/*
-			while(win == false) {
-			drawBoard();
-			makeMove();
-			checkwin();
+		while(win == false) {
+			instance.makeMove();
 			}
-		*/	
 	}
 
 	public static void changePlayer() {
@@ -98,6 +93,8 @@ public class pylos_AI {
 		System.out.println("Your move: ");
 		String move = keyboard.next();
 		System.out.println(move);
+		board.insert(move, currentPlayer);
+		board.showBoard();
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
