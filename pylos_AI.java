@@ -9,7 +9,9 @@ import java.io.*;
 
 public class pylos_AI {
 
+	public static AIPlayer ai_player;
 	public static Board board = new Board();
+	public static int limit = 2;
 	
 	//global variables here
 	int white_balls = 15;
@@ -27,12 +29,23 @@ public class pylos_AI {
 	long duration = 0; //The timing of the AI's move
 	
 	public static void main(String[] args) {
+		ai_player = new AIPlayer(limit);
 		pylos_AI instance = new pylos_AI();
 		instance.greeting();
-		instance.drawBoard();
-		while(win == false) {
-			instance.makeMove();
+		board.possibleMoves();
+		board.showBoard();
+
+		do {
+			if(currentPlayer==1) {
+				System.out.println("AI made its move!!");
 			}
+			else instance.makeMove();
+
+			board.showBoard();
+			changePlayer();
+			instance.checkwin();
+		}
+		while(win != true);
 	}
 
 	public static void changePlayer() {
@@ -50,7 +63,7 @@ public class pylos_AI {
 			Scanner keyboard = new Scanner(System.in);
 			System.out.println("Please choose who will make the move first (1-AI, 2-You): ");
 			if (!keyboard.hasNextInt()) {
-				System.out.println("Error!!");
+				System.out.println("Wrong input! Try again: ");
 				continue;
 			}
 			else {
@@ -92,21 +105,19 @@ public class pylos_AI {
 		Scanner keyboard = new Scanner(System.in);
 		System.out.println("Your move: ");
 		String move = keyboard.next();
-		System.out.println(move);
-		board.insert(move, currentPlayer);
-		board.showBoard();
+		int[] translated_move = board.transCoordinate(move);
+		board.insert(translated_move, currentPlayer);
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
 			if (isLine(currentPlayer, move) || isSquare(currentPlayer, move)) {
 				//remove balls here
+				System.out.println("FOUND a line or square!!");
 			}
 		}
 		
 		//Here we manually enter the coordinates for the move.
 		//Then based on player type we either do run Minimax (in case of AI's move) or we do not (in case of Human move - just place the ball)
-		changePlayer();
-
 	}
 	
 	//For isSquare() and isLine()

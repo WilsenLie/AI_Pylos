@@ -71,10 +71,11 @@ public class Board{
 			}
 			System.out.println();
 		}
+		System.out.println();
 	}
 
-	public void insert(String coordinate, int whichPlayer) { //there should be two variables passed to this function. 1-coordinates; 2-currentPlayer
-		int[] pos = transCoordinate(coordinate);
+	public void insert(int[] pos, int whichPlayer) { //there should be two variables passed to this function. 1-coordinates; 2-currentPlayer
+		//int[] pos = transCoordinate(coordinate);
 		
 		switch(pos[0]) {
 			case 1 :
@@ -122,5 +123,38 @@ public class Board{
 		}
 		result[2] = tempCol;
 		return result;
+	}
+
+	public void possibleMoves() {
+		List<int[]> result = new ArrayList<int[]>();
+		int num_moves = 0;
+		for (int i = 0; i<4; i++) {
+			for (int j=0; j<4; j++) {
+				if (tier1_board[i][j] == 0) {
+					int[] each_move = {0, i, j};
+					result.add(each_move);
+				}
+			}
+		}
+
+		for (int i = 0; i<3; i++) {
+			for (int j = 0; j<3; j++) {
+				if (tier2_board[i][j] == 0 && tier1_board[i][j] != 0 && tier1_board[i][j+1] !=0 && tier1_board[i+1][j] != 0 && tier1_board[i+1][j+1] != 0) {
+					int[] each_move = {1, i, j};
+					result.add(each_move);
+				}
+			}
+		}
+
+		for (int i = 0; i<2; i++) {
+			for (int j = 0; j<2; j++) {
+				if (tier3_board[i][j] == 0 && tier2_board[i][j] != 0 && tier2_board[i][j+1] !=0 && tier2_board[i+1][j] != 0 && tier2_board[i+1][j+1] != 0) {
+					int[] each_move = {2, i, j};
+					result.add(each_move);
+				}
+			}
+		}
+		int l = result.size();
+		System.out.println("SIIIIIZZZZEEEEEEEEEE: " + l);
 	}
 }
