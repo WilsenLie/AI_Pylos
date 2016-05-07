@@ -70,7 +70,54 @@ public class Board{
 		}
 	}
 
-	public boolean insert() { //there should be two variables passed to this function. 1-coordinates; 2-currentPlayer
-		return true;
+	public void insert(String coordinate, int whichPlayer) { //there should be two variables passed to this function. 1-coordinates; 2-currentPlayer
+		int[] pos = transCoordinate(coordinate);
+		
+		switch(pos[0]) {
+			case 1 :
+				tier1_board[pos[1]][pos[2]] = whichPlayer;
+				break;
+			case 2 :
+				tier2_board[pos[1]][pos[2]] = whichPlayer;
+				break;
+			case 3 :
+				tier3_board[pos[1]][pos[2]] = whichPlayer;
+				break;
+			case 4 :
+				tier4 = whichPlayer;
+				break;
+			default :
+				System.out.println ("error");
+		}
+	}
+	
+	public int[] transCoordinate (String coordinate) {
+		//[0] = which tier
+		//[1] = which row in that tier
+		//[2] = which column in that tier
+		int[] result = {0,0,0};
+		char[] rows = {'a', 'b', 'c', 'd','e','f','g','h','i','j'};
+		char tempRow = coordinate.charAt(0);
+		int tempCol = Character.getNumericValue(coordinate.charAt(1))-1;
+		int findTier =  Arrays.binarySearch(rows, tempRow);
+		
+		if (findTier >=0 && findTier <=3) { //1st tier
+			result[0] = 1;
+			result[1] = tempRow - 97; //97 is an int value of char 'a'
+		}
+		else if (findTier >=4 && findTier <=6) { //2nd tier
+			result[0] = 2;
+			result[1] = tempRow - 101; //101 is an int value of char 'e'
+		}
+		else if (findTier ==7 || findTier ==8) { //3rd tier
+			result[0] = 3;
+			result[1] = tempRow - 104; //104 is an int value of char 'h'
+		}
+		else { //top pyramid
+			result[0] = 4;
+			result[1] = tempRow - 106; //97 is an int value of char 'j'
+		}
+		result[2] = tempCol;
+		return result;
 	}
 }

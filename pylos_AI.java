@@ -114,8 +114,6 @@ public class pylos_AI {
 	
 	//For isSquare() and isLine()
 	char[] rows = {'a', 'b', 'c', 'd','e','f','g','h','i','j'};
-	char[][] rows2 = {{'a', 'b', 'c', 'd'},{'e','f','g'},{'h','i'},{'j'}};
-	char[][] cols = {{'1','2','3','4'},{'1','2','3'}, {'1','2'},{'1'}};
 	
 	public boolean isSquare(int whichPlayer, String currentMove) {
 		//There are 14 possible squares (4x4, 3x3, 2x2)
