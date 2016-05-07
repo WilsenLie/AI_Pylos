@@ -31,12 +31,14 @@ public class pylos_AI {
 	public static void main(String[] args) {
 		ai_player = new AIPlayer(limit);
 		pylos_AI instance = new pylos_AI();
+		int[] cell;
 		instance.greeting();
 		board.possibleMoves();
 		board.showBoard();
 
 		do {
 			if(currentPlayer==1) {
+				cell = ai_player.alphaBetaSearch(board);
 				System.out.println("AI made its move!!");
 			}
 			else instance.makeMove();

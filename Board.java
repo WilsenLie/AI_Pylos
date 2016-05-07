@@ -125,7 +125,7 @@ public class Board{
 		return result;
 	}
 
-	public void possibleMoves() {
+	public List<int[]> possibleMoves() {
 		List<int[]> result = new ArrayList<int[]>();
 		int num_moves = 0;
 		for (int i = 0; i<4; i++) {
@@ -156,5 +156,6 @@ public class Board{
 		}
 		int l = result.size();
 		System.out.println("SIIIIIZZZZEEEEEEEEEE: " + l);
+		return result;
 	}
 }
