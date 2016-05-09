@@ -127,7 +127,7 @@ public class pylos_AI {
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
-			if (isLine(currentPlayer, move) || isSquare(currentPlayer, move)) {
+			if (board.isLine(currentPlayer, move) || board.isSquare(currentPlayer, move)) {
 				//remove balls here
 				System.out.println("FOUND a line or square!!");
 			}
@@ -138,7 +138,6 @@ public class pylos_AI {
 	}
 	
 	//For isSquare() and isLine()
-	char[] rows = {'a', 'b', 'c', 'd','e','f','g','h','i','j'};
 	int[] removable = new int[29];
 	
 	//0 for non-removable
@@ -187,120 +186,6 @@ public class pylos_AI {
 		}
 		else {
 			return 29;
-		}
-	}
-	
-	
-	
-	public boolean isSquare(int whichPlayer, String currentMove) {
-		//There are 14 possible squares (4x4, 3x3, 2x2)
-		//We don't need to check the whole board
-		//Just check after the last move and surround
-		char tempRow = currentMove.charAt(0);
-		int tempCol = Character.getNumericValue(currentMove.charAt(1))-1;
-		int findTier =  Arrays.binarySearch(rows, tempRow);
-		if (findTier >=0 && findTier <=3) { //1st tier
-			int temp = tempRow - 97; //97 is an int value of char 'a'
-			
-			//Top left corner
-			if (temp-1 >= 0 && tempCol-1 >= 0) {
-				if (board.tier1_board[temp-1][tempCol-1] == whichPlayer && board.tier1_board[temp-1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol-1] == whichPlayer) {
-					return true;
-				}
-			}
-			//top right corner
-			else if (temp-1 >= 0 && tempCol+1 <= 3) {
-				if (board.tier1_board[temp-1][tempCol+1] == whichPlayer && board.tier1_board[temp-1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol+1] == whichPlayer) {
-					return true;
-				}
-			}
-			//bottom left corner
-			else if (temp+1 <= 3 && tempCol-1 >= 0) {
-				if (board.tier1_board[temp+1][tempCol-1] == whichPlayer && board.tier1_board[temp+1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol-1] == whichPlayer) {
-					return true;
-				}
-			}
-			//bottom right corner
-			else if (temp+1 <= 3 && tempCol+1 <= 3) {
-				if (board.tier1_board[temp+1][tempCol+1] == whichPlayer && board.tier1_board[temp+1][tempCol] == whichPlayer && board.tier1_board[temp][tempCol+1] == whichPlayer) {
-					return true;
-				}
-			}
-		}
-		
-		else { //2nd tier
-			int temp = tempRow - 101; //101 is an int value of char 'e'
-			
-			//Top left corner
-			if (temp-1 >= 0 && tempCol-1 >= 0) {
-				if (board.tier2_board[temp-1][tempCol-1] == whichPlayer && board.tier2_board[temp-1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol-1] == whichPlayer) {
-					return true;
-				}
-			}
-			//top right corner
-			else if (temp-1 >= 0 && tempCol+1 <= 2) {
-				if (board.tier2_board[temp-1][tempCol+1] == whichPlayer && board.tier2_board[temp-1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol+1] == whichPlayer) {
-					return true;
-				}
-			}
-			//bottom left corner
-			else if (temp+1 <= 2 && tempCol-1 >= 0) {
-				if (board.tier2_board[temp+1][tempCol-1] == whichPlayer && board.tier2_board[temp+1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol-1] == whichPlayer) {
-					return true;
-				}
-			}
-			//bottom right corner
-			else if (temp+1 <= 2 && tempCol+1 <= 2) {
-				if (board.tier2_board[temp+1][tempCol+1] == whichPlayer && board.tier2_board[temp+1][tempCol] == whichPlayer && board.tier2_board[temp][tempCol+1] == whichPlayer) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public boolean isLine(int whichPlayer, String currentMove) {
-		//There are 14 possible lines
-		char tempRow = currentMove.charAt(0);
-		int tempCol = Character.getNumericValue(currentMove.charAt(1))-1;
-		int i = 0;
-		boolean hor = true;
-		boolean ver = true;
-		
-		int findTier =  Arrays.binarySearch(rows, tempRow);
-		if (findTier >=0 && findTier <=3) {
-			//in 1st tier 4x4
-			int temp = tempRow - 97; //97 is an int value of char 'a'
-			for (i=0; i<4; i++) { //horizontal
-				if (board.tier1_board[temp][i] != whichPlayer) {
-					hor = false;
-					break;
-				}
-			}
-			for (i=0; i<4; i++) { //vertical
-				if (board.tier1_board[(temp+i)%4][tempCol] != whichPlayer) {
-					ver = false;
-					break;
-				}
-			}
-			return (hor || ver);
-		}
-		else {
-			//in 2nd tier 3x3
-			int temp = tempRow - 101; //101 is an int value of char 'e'
-			for (i=0; i<3; i++) { //horizontal
-				if (board.tier2_board[temp][i] != whichPlayer) {
-					hor = false;
-					break;
-				}
-			}
-			for (i=0; i<3; i++) { //vertical
-				if (board.tier2_board[(temp+i)%3][tempCol] != whichPlayer) {
-					ver = false;
-					break;
-				}
-			}
-			return (hor || ver);
 		}
 	}
 	
