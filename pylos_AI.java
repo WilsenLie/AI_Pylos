@@ -106,10 +106,23 @@ public class pylos_AI {
 	public void makeMove() {
 		System.out.println("Please make a move in the followin format: \n The bottom tier is squares: [a,b,c,d][1-4], \n The second tier up is squares: [e,f,g][1-3], \n The third tier up is squares: [h,i][1-2], \n The top tier is square j1.");
 		Scanner keyboard = new Scanner(System.in);
+		String move;
+		int[] translated_move;
+		boolean good_move = false;
+		do {
 		System.out.println("Your move: ");
-		String move = keyboard.next();
-		int[] translated_move = board.transCoordinate(move);
-		board.insert(translated_move, currentPlayer);
+		move = keyboard.next();
+		translated_move = board.transCoordinate(move);
+		
+			if(board.possibleMoves().contains(translated_move)) {
+				board.insert(translated_move, currentPlayer);
+				good_move = true;
+			}
+			else {
+				System.out.println("Cell is occupied");
+			}
+		}
+		while(good_move != true);
 		updateRemovable(translated_move, currentPlayer);
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
