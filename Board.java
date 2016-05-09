@@ -91,7 +91,7 @@ public class Board{
 				tier_4 = whichPlayer;
 				break;
 			default :
-				System.out.println ("error");
+				System.out.println ("error_insert");
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class Board{
 		for (int i = 0; i<4; i++) {
 			for (int j=0; j<4; j++) {
 				if (tier1_board[i][j] == 0) {
-					int[] each_move = {0, i, j};
+					int[] each_move = {1, i, j};
 					result.add(each_move);
 				}
 			}
@@ -140,7 +140,7 @@ public class Board{
 		for (int i = 0; i<3; i++) {
 			for (int j = 0; j<3; j++) {
 				if (tier2_board[i][j] == 0 && tier1_board[i][j] != 0 && tier1_board[i][j+1] !=0 && tier1_board[i+1][j] != 0 && tier1_board[i+1][j+1] != 0) {
-					int[] each_move = {1, i, j};
+					int[] each_move = {2, i, j};
 					result.add(each_move);
 				}
 			}
@@ -149,13 +149,67 @@ public class Board{
 		for (int i = 0; i<2; i++) {
 			for (int j = 0; j<2; j++) {
 				if (tier3_board[i][j] == 0 && tier2_board[i][j] != 0 && tier2_board[i][j+1] !=0 && tier2_board[i+1][j] != 0 && tier2_board[i+1][j+1] != 0) {
-					int[] each_move = {2, i, j};
+					int[] each_move = {3, i, j};
 					result.add(each_move);
 				}
 			}
 		}
-		int l = result.size();
-		System.out.println("SIIIIIZZZZEEEEEEEEEE: " + l);
+		//int l = result.size();
+		//System.out.println("SIIIIIZZZZEEEEEEEEEE: " + l);
 		return result;
+	}
+
+	public int isWin() {
+		return tier_4;
+	}
+
+	public int evaluateContent() {
+		int utility = 128;
+		int sum = 0;
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j <4; j++) {
+				if (tier1_board[i][j] == 1)
+					sum += tier1_evaluationTable[i][j];
+				else if (tier1_board[i][j] == 2)
+					sum -= tier1_evaluationTable[i][j];
+			}
+		
+				for (int i = 0; i < 3; i++) {
+					for (int j = 0; j <3; j++)
+				
+				if (tier2_board[i][j] == 1)
+					sum += tier2_evaluationTable[i][j];
+				else if (tier2_board[i][j] == 2)
+					sum -= tier2_evaluationTable[i][j];
+			}
+
+				for (int i = 0; i < 2; i++) {
+					for (int j = 0; j <2; j++)
+				if (tier3_board[i][j] == 1)
+					sum += tier3_evaluationTable[i][j];
+				else if (tier3_board[i][j] == 2)
+					sum -= tier3_evaluationTable[i][j];
+			}
+
+		return utility + sum;
+	}
+
+	public void remove(int[] pos) {
+		switch(pos[0]) {
+			case 1 :
+				tier1_board[pos[1]][pos[2]] = 0;
+				break;
+			case 2 :
+				tier2_board[pos[1]][pos[2]] = 0;
+				break;
+			case 3 :
+				tier3_board[pos[1]][pos[2]] = 0;
+				break;
+			case 4 :
+				tier_4 = 0;
+				break;
+			default :
+				System.out.println ("error_remove");
+		}
 	}
 }

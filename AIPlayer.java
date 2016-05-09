@@ -21,31 +21,65 @@ public class AIPlayer {
 		//check if the board is in a terminal (winning) state and
 		//return the maximum or minimum utility value (255 - depth or 
 		//0 + depth) if the max player or min player is winning.
-		//if (board.isFinished() != ' ') 
-			//if (board.isFinished() == mySymbol)
-				//return 255 - depth;
-			//else return 0 + depth; 
+		//System.out.println("MAX started");
+		if (board.isWin() != 0) 
+			if (board.isWin() == mySymbol)
+				return 255 - depth;
+			else return 0 + depth; 
 		//check if the depth has reached its limit or if the 
 		//board is in a terminal (tie) state and return its utility value.
 		if (depth == searchLimit)
-			//return board.evaluateContent();
+			return board.evaluateContent();
 		depth = depth + 1;
-		int column = 0;
+		int[] cell = {0,0,0};
 		List<int[]> possib_moves = new ArrayList<int[]>();
+		possib_moves = board.possibleMoves();
+		int[] test = possib_moves.get(0);
 		for (int i = 0; i<possib_moves.size(); i++) { 
 				board.insert(possib_moves.get(i), mySymbol);
-				//int value = minValue(board, depth, alpha, beta);
-				int value = 0;
+				int value = minValue(board, depth, alpha, beta);
+				//System.out.println("VALUEEEEE IN MAX: " + value);
 				if (value > alpha) {
 					alpha = value;
-					column = i;
+					cell = possib_moves.get(i);
 				}
-				//board.remove(i);
+				int[] cell_remove = possib_moves.get(i);
+				board.remove(cell_remove);
 				if (alpha >= beta) 
 					return alpha;
 		}
-		//maxCell = column;
+		maxCell = cell;
 		return alpha;
+	}
+
+	private int minValue(Board board, int depth, int alpha, int beta) {
+		//check if the board is in a terminal (winning) state and
+		//return the maximum or minimum utility value (255 - depth or 
+		//0 + depth) if the max player or min player is winning.
+		//System.out.println("MIN started");
+		if (board.isWin() != 0)
+			if (board.isWin() == mySymbol)
+				return 255 - depth;
+			else return 0 + depth;
+		//check if the depth has reached its limit or if the 
+		//board is in a terminal (tie) state and return its utility value.
+		if (depth == searchLimit)
+			return board.evaluateContent();
+		depth = depth + 1;
+		List<int[]> possib_moves = new ArrayList<int[]>();
+		possib_moves = board.possibleMoves();
+		for (int i = 0; i < possib_moves.size(); i++) {
+				board.insert(possib_moves.get(i), opponentSymbol);
+				int value = maxValue(board, depth, alpha, beta);
+				//System.out.println("VALUEEEEE IN MIN: " + value);
+				if (value < beta)
+					beta = value;
+				int[] cell_remove = possib_moves.get(i);
+				board.remove(cell_remove);
+				if (beta <= alpha) 
+					return beta;
+		}
+		return beta;
 	}
 
 }

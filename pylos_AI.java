@@ -11,7 +11,7 @@ public class pylos_AI {
 
 	public static AIPlayer ai_player;
 	public static Board board = new Board();
-	public static int limit = 2;
+	public static int limit = 4;
 	
 	//global variables here
 	int white_balls = 15;
@@ -39,6 +39,7 @@ public class pylos_AI {
 		do {
 			if(currentPlayer==1) {
 				cell = ai_player.alphaBetaSearch(board);
+				board.insert(cell, currentPlayer);
 				System.out.println("AI made its move!!");
 			}
 			else instance.makeMove();
@@ -288,14 +289,6 @@ public class pylos_AI {
 			}
 			return (hor || ver);
 		}
-	}
-	
-	public int minimax(int alpha, int beta, int maxDepth, int currentPlayer) { 
-		long startTime = System.nanoTime();
-		//TODO here
-		long endTime = System.nanoTime();
-		duration = (endTime - startTime);  //divide by 1000000 to get milliseconds.
-		return 0;
 	}
 	
 	public boolean checkwin() {
