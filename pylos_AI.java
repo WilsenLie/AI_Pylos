@@ -114,7 +114,7 @@ public class pylos_AI {
 		move = keyboard.next();
 		translated_move = board.transCoordinate(move);
 		
-			if(board.possibleMoves().contains(translated_move)) {
+			if(board.legalMove(translated_move)) {
 				board.insert(translated_move, currentPlayer);
 				good_move = true;
 			}

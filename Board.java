@@ -212,4 +212,26 @@ public class Board{
 				System.out.println ("error_remove");
 		}
 	}
+
+	public boolean legalMove (int[] pos) {
+		switch(pos[0]) {
+			case 1 :
+				if(tier1_board[pos[1]][pos[2]] == 0)
+					return true;
+				else return false;
+			case 2 :
+				if(tier2_board[pos[1]][pos[2]] == 0)
+					return true;
+				else return false;
+			case 3 :
+				if(tier3_board[pos[1]][pos[2]] == 0)
+					return true;
+				else return false;
+			case 4 :
+				if(tier_4 == 0)
+					return true;
+				else return false;
+		}
+		return false;
+	}
 }
