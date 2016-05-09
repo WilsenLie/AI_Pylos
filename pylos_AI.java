@@ -194,7 +194,7 @@ public class pylos_AI {
 		if (black_balls==0 || white_balls==0) {
 			return true;
 		}
-		if (board.tier_4!=0) return true;
+		if (board.tier_4[0][0]!=0) return true;
 
 		return false;
 	}

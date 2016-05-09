@@ -37,10 +37,13 @@ public class AIPlayer {
 		int[] test = possib_moves.get(0);
 		for (int i = 0; i<possib_moves.size(); i++) { 
 			int value = 0;
-				board.insert(possib_moves.get(i), mySymbol);
-				if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
-					value+=50;
+			if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
+					System.out.println("GOT LINE OR SQUARE in MAX");
+					//value = value + 50 - depth;
 				}
+				board.insert(possib_moves.get(i), mySymbol);
+				System.out.println("SIZE MAX: " + possib_moves.size());
+				//board.showBoard();
 				value += minValue(board, depth, alpha, beta);
 				//System.out.println("VALUEEEEE IN MAX: " + value);
 				if (value > alpha) {
@@ -73,8 +76,15 @@ public class AIPlayer {
 		List<int[]> possib_moves = new ArrayList<int[]>();
 		possib_moves = board.possibleMoves();
 		for (int i = 0; i < possib_moves.size(); i++) {
+				int value = 0;
+				if(board.isSquare(opponentSymbol, possib_moves.get(i)) || board.isLine(opponentSymbol, possib_moves.get(i))) {
+					System.out.println("GOT LINE OR SQUARE in MIN");
+					value = value + 150 - depth;
+				}
 				board.insert(possib_moves.get(i), opponentSymbol);
-				int value = maxValue(board, depth, alpha, beta);
+				System.out.println("SIZE MIN: " + possib_moves.size());
+				//board.showBoard();
+				value += maxValue(board, depth, alpha, beta);
 				//System.out.println("VALUEEEEE IN MIN: " + value);
 				if (value < beta)
 					beta = value;

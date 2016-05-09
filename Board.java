@@ -9,7 +9,7 @@ public class Board{
 	public int tier1_board[][] = new int[tier1_dim][tier1_dim];
 	public int tier2_board[][] = new int[tier2_dim][tier2_dim];
 	public int tier3_board[][] = new int[tier3_dim][tier3_dim];
-	public int tier_4 = 0;
+	public int tier_4[][] = new int[1][1];
 
 	private static int[][] tier1_evaluationTable = {{3, 4, 4, 3,}, 
 		  				  					  		{4, 6, 6, 4},
@@ -17,7 +17,7 @@ public class Board{
 		  				  					 		{3, 4, 4, 3}};
 
     private static int[][] tier2_evaluationTable = {{8, 9, 8}, 
-		  				  					  		{9, 10, 9},
+		  				  					  		{9, 15, 9},
 		  				  					  		{8, 9, 8}};
    
     private static int[][] tier3_evaluationTable = {{12, 12}, 
@@ -65,8 +65,8 @@ public class Board{
 			
 			//Top of pyramid
 			if(i==0){
-				if (tier_4 == 1) System.out.print("w ");
-				else if (tier_4 == 2) System.out.print("b ");
+				if (tier_4[0][0] == 1) System.out.print("w ");
+				else if (tier_4[0][0] == 2) System.out.print("b ");
 				else System.out.print("o ");
 			}
 			System.out.println();
@@ -88,7 +88,7 @@ public class Board{
 				tier3_board[pos[1]][pos[2]] = whichPlayer;
 				break;
 			case 4 :
-				tier_4 = whichPlayer;
+				tier_4[0][0] = whichPlayer;
 				break;
 			default :
 				System.out.println ("error_insert");
@@ -154,13 +154,18 @@ public class Board{
 				}
 			}
 		}
+
+		if(tier3_board[0][0] != 0 && tier3_board[0][1] != 0 && tier3_board[1][0] != 0 && tier3_board[1][1] != 0) {
+			int[] each_move = {4,0,0};
+			result.add(each_move);
+		}
 		//int l = result.size();
 		//System.out.println("SIIIIIZZZZEEEEEEEEEE: " + l);
 		return result;
 	}
 
 	public int isWin() {
-		return tier_4;
+		return tier_4[0][0];
 	}
 
 	public int evaluateContent() {
@@ -206,7 +211,7 @@ public class Board{
 				tier3_board[pos[1]][pos[2]] = 0;
 				break;
 			case 4 :
-				tier_4 = 0;
+				tier_4[0][0] = 0;
 				break;
 			default :
 				System.out.println ("error_remove");
@@ -228,7 +233,7 @@ public class Board{
 					return true;
 				else return false;
 			case 4 :
-				if(tier_4 == 0)
+				if(tier_4[0][0] == 0)
 					return true;
 				else return false;
 		}
