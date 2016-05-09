@@ -127,7 +127,7 @@ public class pylos_AI {
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
-			if (board.isLine(currentPlayer, move) || board.isSquare(currentPlayer, move)) {
+			if (board.isLine(currentPlayer, translated_move) || board.isSquare(currentPlayer, translated_move)) {
 				//remove balls here
 				System.out.println("FOUND a line or square!!");
 			}

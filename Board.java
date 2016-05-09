@@ -235,68 +235,63 @@ public class Board{
 		return false;
 	}
 
-	char[] rows = {'a', 'b', 'c', 'd','e','f','g','h','i','j'};
 
-	public boolean isSquare(int whichPlayer, String currentMove) {
+	public boolean isSquare(int whichPlayer, int[] currentMove) {
 		//There are 14 possible squares (4x4, 3x3, 2x2)
 		//We don't need to check the whole board
 		//Just check after the last move and surround
-		char tempRow = currentMove.charAt(0);
-		int tempCol = Character.getNumericValue(currentMove.charAt(1))-1;
-		int findTier =  Arrays.binarySearch(rows, tempRow);
+		int tempRow = currentMove[1];
+		int tempCol = currentMove[2];
+		int findTier =  currentMove[0];
 		if (findTier >=0 && findTier <=3) { //1st tier
-			int temp = tempRow - 97; //97 is an int value of char 'a'
-			
 			//Top left corner
-			if (temp-1 >= 0 && tempCol-1 >= 0) {
-				if (tier1_board[temp-1][tempCol-1] == whichPlayer && tier1_board[temp-1][tempCol] == whichPlayer && tier1_board[temp][tempCol-1] == whichPlayer) {
+			if (tempRow-1 >= 0 && tempCol-1 >= 0) {
+				if (tier1_board[tempRow-1][tempCol-1] == whichPlayer && tier1_board[tempRow-1][tempCol] == whichPlayer && tier1_board[tempRow][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//top right corner
-			else if (temp-1 >= 0 && tempCol+1 <= 3) {
-				if (tier1_board[temp-1][tempCol+1] == whichPlayer && tier1_board[temp-1][tempCol] == whichPlayer && tier1_board[temp][tempCol+1] == whichPlayer) {
+			else if (tempRow-1 >= 0 && tempCol+1 <= 3) {
+				if (tier1_board[tempRow-1][tempCol+1] == whichPlayer && tier1_board[tempRow-1][tempCol] == whichPlayer && tier1_board[tempRow][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom left corner
-			else if (temp+1 <= 3 && tempCol-1 >= 0) {
-				if (tier1_board[temp+1][tempCol-1] == whichPlayer && tier1_board[temp+1][tempCol] == whichPlayer && tier1_board[temp][tempCol-1] == whichPlayer) {
+			else if (tempRow+1 <= 3 && tempCol-1 >= 0) {
+				if (tier1_board[tempRow+1][tempCol-1] == whichPlayer && tier1_board[tempRow+1][tempCol] == whichPlayer && tier1_board[tempRow][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom right corner
-			else if (temp+1 <= 3 && tempCol+1 <= 3) {
-				if (tier1_board[temp+1][tempCol+1] == whichPlayer && tier1_board[temp+1][tempCol] == whichPlayer && tier1_board[temp][tempCol+1] == whichPlayer) {
+			else if (tempRow+1 <= 3 && tempCol+1 <= 3) {
+				if (tier1_board[tempRow+1][tempCol+1] == whichPlayer && tier1_board[tempRow+1][tempCol] == whichPlayer && tier1_board[tempRow][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
 		}
 		
 		else { //2nd tier
-			int temp = tempRow - 101; //101 is an int value of char 'e'
-			
 			//Top left corner
-			if (temp-1 >= 0 && tempCol-1 >= 0) {
-				if (tier2_board[temp-1][tempCol-1] == whichPlayer && tier2_board[temp-1][tempCol] == whichPlayer && tier2_board[temp][tempCol-1] == whichPlayer) {
+			if (tempRow-1 >= 0 && tempCol-1 >= 0) {
+				if (tier2_board[tempRow-1][tempCol-1] == whichPlayer && tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//top right corner
-			else if (temp-1 >= 0 && tempCol+1 <= 2) {
-				if (tier2_board[temp-1][tempCol+1] == whichPlayer && tier2_board[temp-1][tempCol] == whichPlayer && tier2_board[temp][tempCol+1] == whichPlayer) {
+			else if (tempRow-1 >= 0 && tempCol+1 <= 2) {
+				if (tier2_board[tempRow-1][tempCol+1] == whichPlayer && tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom left corner
-			else if (temp+1 <= 2 && tempCol-1 >= 0) {
-				if (tier2_board[temp+1][tempCol-1] == whichPlayer && tier2_board[temp+1][tempCol] == whichPlayer && tier2_board[temp][tempCol-1] == whichPlayer) {
+			else if (tempRow+1 <= 2 && tempCol-1 >= 0) {
+				if (tier2_board[tempRow+1][tempCol-1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow][tempCol-1] == whichPlayer) {
 					return true;
 				}
 			}
 			//bottom right corner
-			else if (temp+1 <= 2 && tempCol+1 <= 2) {
-				if (tier2_board[temp+1][tempCol+1] == whichPlayer && tier2_board[temp+1][tempCol] == whichPlayer && tier2_board[temp][tempCol+1] == whichPlayer) {
+			else if (tempRow+1 <= 2 && tempCol+1 <= 2) {
+				if (tier2_board[tempRow+1][tempCol+1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow][tempCol+1] == whichPlayer) {
 					return true;
 				}
 			}
@@ -304,26 +299,25 @@ public class Board{
 		return false;
 	}
 	
-	public boolean isLine(int whichPlayer, String currentMove) {
+	public boolean isLine(int whichPlayer, int[] currentMove) {
 		//There are 14 possible lines
-		char tempRow = currentMove.charAt(0);
-		int tempCol = Character.getNumericValue(currentMove.charAt(1))-1;
+		int tempRow = currentMove[1];
+		int tempCol = currentMove[2];
+		int findTier =  currentMove[0];
 		int i = 0;
 		boolean hor = true;
 		boolean ver = true;
 		
-		int findTier =  Arrays.binarySearch(rows, tempRow);
 		if (findTier >=0 && findTier <=3) {
 			//in 1st tier 4x4
-			int temp = tempRow - 97; //97 is an int value of char 'a'
 			for (i=0; i<4; i++) { //horizontal
-				if (tier1_board[temp][i] != whichPlayer) {
+				if (tier1_board[tempRow][i] != whichPlayer) {
 					hor = false;
 					break;
 				}
 			}
 			for (i=0; i<4; i++) { //vertical
-				if (tier1_board[(temp+i)%4][tempCol] != whichPlayer) {
+				if (tier1_board[(tempRow+i)%4][tempCol] != whichPlayer) {
 					ver = false;
 					break;
 				}
@@ -332,15 +326,14 @@ public class Board{
 		}
 		else {
 			//in 2nd tier 3x3
-			int temp = tempRow - 101; //101 is an int value of char 'e'
 			for (i=0; i<3; i++) { //horizontal
-				if (tier2_board[temp][i] != whichPlayer) {
+				if (tier2_board[tempRow][i] != whichPlayer) {
 					hor = false;
 					break;
 				}
 			}
 			for (i=0; i<3; i++) { //vertical
-				if (tier2_board[(temp+i)%3][tempCol] != whichPlayer) {
+				if (tier2_board[(tempRow+i)%3][tempCol] != whichPlayer) {
 					ver = false;
 					break;
 				}
