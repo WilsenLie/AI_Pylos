@@ -138,17 +138,58 @@ public class pylos_AI {
 	}
 	
 	//For isSquare() and isLine()
-	int[] removable = new int[29];
+	int[][] removable = new int[29][2]; //values, whichplayer
 	
 	//0 for non-removable
 	//1 for removable by player 1, 2 for removable by player 2
 	public void updateRemovable(int[] currentMove, int whichPlayer) {
+		int x = currentMove[1];
+		int y = currentMove[2];
+		
 		if (currentMove[0] == 1) {
-			removable[coordToInt(currentMove[0], currentMove[1], currentMove[2])] = whichPlayer;
+			
+			if ((x==0 && y==0) || (x==3 && y==0) || (x==0 && y==3) || (x==3 && y==3)) {
+				removable[coordToInt(currentMove[0], x, y)][0] = 1;
+			}
+			else if ((x==1 && y==1) || (x==1 && y==2) || (x==2 && y==1) || (x==2 && y==2)) {
+				removable[coordToInt(currentMove[0], x, y)][0] = 4;
+			}
+			else {
+				removable[coordToInt(currentMove[0], x, y)][0] = 2;
+			}
+			removable[coordToInt(currentMove[0], x, y)][1] = whichPlayer;
+		}
+		else if (currentMove[0] == 2) {
+			int temp = coordToInt(currentMove[0], x, y);
+			removable[temp] = whichPlayer;
+			
+			//if ball is in 2nd tier, 4 balls below it cannot be removed
+			int[] temp2 = {(temp-16)/3, (temp-16)%3}; //back to coordinates
+			removable[coordToInt(1,temp2[0], temp2[1])] = 0;
+			removable[coordToInt(1,temp2[0]+1, temp2[1])] = 0;
+			removable[coordToInt(1,temp2[0], temp2[1]+1)] = 0;
+			removable[coordToInt(1,temp2[0]+1, temp2[1]+1)] = 0;
+		}
+		else if (currentMove[0] == 3) {
+			int temp = coordToInt(currentMove[0], x, y);
+			removable[temp] = whichPlayer;
+			
+			//if ball is in 3rd tier, 4 balls below it cannot be removed
+			int[] temp2 = {(temp-25)/2, (temp-25)%2}; //back to coordinates
+			removable[coordToInt(2,temp2[0], temp2[1])] = 0;
+			removable[coordToInt(2,temp2[0]+1, temp2[1])] = 0;
+			removable[coordToInt(2,temp2[0], temp2[1]+1)] = 0;
+			removable[coordToInt(2,temp2[0]+1, temp2[1]+1)] = 0;
+		}
+	}
+	
+	public void updateRemovable2(int[] currentMove, int whichPlayer) {
+		if (currentMove[0] == 1) {
+			removable[coordToInt(currentMove[0], currentMove[1], currentMove[2])] = 0;
 		}
 		else if (currentMove[0] == 2) {
 			int temp = coordToInt(currentMove[0], currentMove[1], currentMove[2]);
-			removable[temp] = whichPlayer;
+			removable[temp] = 0;
 			
 			//if ball is in 2nd tier, 4 balls below it cannot be removed
 			int[] temp2 = {(temp-16)/3, (temp-16)%3}; //back to coordinates
@@ -169,6 +210,7 @@ public class pylos_AI {
 			removable[coordToInt(2,temp2[0]+1, temp2[1]+1)] = 0;
 		}
 	}
+	
 	
 	private int coordToInt (int z, int x, int y) {
 		//x = row
