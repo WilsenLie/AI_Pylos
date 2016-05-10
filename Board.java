@@ -5,28 +5,28 @@ public class Board{
 	public final int tier1_dim = 4;
 	public final int tier2_dim = 3;
 	public final int tier3_dim = 2;
-
+	
 	public int tier1_board[][] = new int[tier1_dim][tier1_dim];
 	public int tier2_board[][] = new int[tier2_dim][tier2_dim];
 	public int tier3_board[][] = new int[tier3_dim][tier3_dim];
 	public int tier_4[][] = new int[1][1];
-
+	
 	private static int[][] tier1_evaluationTable = {{3, 4, 4, 3,}, 
-		  				  					  		{4, 6, 6, 4},
-		  				  					  		{4, 6, 6, 4}, 
-		  				  					 		{3, 4, 4, 3}};
-
+		{4, 6, 6, 4},
+		{4, 6, 6, 4}, 
+	{3, 4, 4, 3}};
+	
     private static int[][] tier2_evaluationTable = {{8, 9, 8}, 
-		  				  					  		{9, 15, 9},
-		  				  					  		{8, 9, 8}};
-   
+		{9, 15, 9},
+	{8, 9, 8}};
+	
     private static int[][] tier3_evaluationTable = {{12, 12}, 
-		  				  					  		{12, 12}};
-
+	{12, 12}};
+	
 	//Board constructor
 	public Board() {
 	}
-
+	
 	//draw the all the tiers
 	public void showBoard() {
 		
@@ -73,26 +73,29 @@ public class Board{
 		}
 		System.out.println();
 	}
-
+	
 	public void insert(int[] pos, int whichPlayer) { //there should be two variables passed to this function. 1-coordinates; 2-currentPlayer
 		//int[] pos = transCoordinate(coordinate);
 		
 		switch(pos[0]) {
 			case 1 :
-				tier1_board[pos[1]][pos[2]] = whichPlayer;
-				break;
+			tier1_board[pos[1]][pos[2]] = whichPlayer;
+			break;
 			case 2 :
-				tier2_board[pos[1]][pos[2]] = whichPlayer;
-				break;
+			tier2_board[pos[1]][pos[2]] = whichPlayer;
+			break;
 			case 3 :
-				tier3_board[pos[1]][pos[2]] = whichPlayer;
-				break;
+			tier3_board[pos[1]][pos[2]] = whichPlayer;
+			break;
 			case 4 :
-				tier_4[0][0] = whichPlayer;
-				break;
+			tier_4[0][0] = whichPlayer;
+			break;
 			default :
-				System.out.println ("error_insert");
+			System.out.println ("error_insert");
 		}
+		int[] temp = {0,0,0};
+		updateRemovable(pos, temp, whichPlayer, 1);
+		
 	}
 	
 	public int[] transCoordinate (String coordinate) {
@@ -124,7 +127,7 @@ public class Board{
 		result[2] = tempCol;
 		return result;
 	}
-
+	
 	public List<int[]> possibleMoves() {
 		List<int[]> result = new ArrayList<int[]>();
 		int num_moves = 0;
@@ -136,7 +139,7 @@ public class Board{
 				}
 			}
 		}
-
+		
 		for (int i = 0; i<3; i++) {
 			for (int j = 0; j<3; j++) {
 				if (tier2_board[i][j] == 0 && tier1_board[i][j] != 0 && tier1_board[i][j+1] !=0 && tier1_board[i+1][j] != 0 && tier1_board[i+1][j+1] != 0) {
@@ -145,7 +148,7 @@ public class Board{
 				}
 			}
 		}
-
+		
 		for (int i = 0; i<2; i++) {
 			for (int j = 0; j<2; j++) {
 				if (tier3_board[i][j] == 0 && tier2_board[i][j] != 0 && tier2_board[i][j+1] !=0 && tier2_board[i+1][j] != 0 && tier2_board[i+1][j+1] != 0) {
@@ -154,7 +157,7 @@ public class Board{
 				}
 			}
 		}
-
+		
 		if(tier3_board[0][0] != 0 && tier3_board[0][1] != 0 && tier3_board[1][0] != 0 && tier3_board[1][1] != 0) {
 			int[] each_move = {4,0,0};
 			result.add(each_move);
@@ -163,84 +166,86 @@ public class Board{
 		//System.out.println("SIIIIIZZZZEEEEEEEEEE: " + l);
 		return result;
 	}
-
+	
 	public int isWin() {
 		return tier_4[0][0];
 	}
-
+	
 	public int evaluateContent() {
 		int utility = 128;
 		int sum = 0;
 		for (int i = 0; i < 4; i++)
-			for (int j = 0; j <4; j++) {
-				if (tier1_board[i][j] == 1)
-					sum += tier1_evaluationTable[i][j];
-				else if (tier1_board[i][j] == 2)
-					sum -= tier1_evaluationTable[i][j];
-			}
+		for (int j = 0; j <4; j++) {
+			if (tier1_board[i][j] == 1)
+			sum += tier1_evaluationTable[i][j];
+			else if (tier1_board[i][j] == 2)
+			sum -= tier1_evaluationTable[i][j];
+		}
 		
-				for (int i = 0; i < 3; i++) {
-					for (int j = 0; j <3; j++)
-				
-				if (tier2_board[i][j] == 1)
-					sum += tier2_evaluationTable[i][j];
-				else if (tier2_board[i][j] == 2)
-					sum -= tier2_evaluationTable[i][j];
-			}
-
-				for (int i = 0; i < 2; i++) {
-					for (int j = 0; j <2; j++)
-				if (tier3_board[i][j] == 1)
-					sum += tier3_evaluationTable[i][j];
-				else if (tier3_board[i][j] == 2)
-					sum -= tier3_evaluationTable[i][j];
-			}
-
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j <3; j++)
+			
+			if (tier2_board[i][j] == 1)
+			sum += tier2_evaluationTable[i][j];
+			else if (tier2_board[i][j] == 2)
+			sum -= tier2_evaluationTable[i][j];
+		}
+		
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j <2; j++)
+			if (tier3_board[i][j] == 1)
+			sum += tier3_evaluationTable[i][j];
+			else if (tier3_board[i][j] == 2)
+			sum -= tier3_evaluationTable[i][j];
+		}
+		
 		return utility + sum;
 	}
-
+	
 	public void remove(int[] pos) {
 		switch(pos[0]) {
 			case 1 :
-				tier1_board[pos[1]][pos[2]] = 0;
-				break;
+			tier1_board[pos[1]][pos[2]] = 0;
+			break;
 			case 2 :
-				tier2_board[pos[1]][pos[2]] = 0;
-				break;
+			tier2_board[pos[1]][pos[2]] = 0;
+			break;
 			case 3 :
-				tier3_board[pos[1]][pos[2]] = 0;
-				break;
+			tier3_board[pos[1]][pos[2]] = 0;
+			break;
 			case 4 :
-				tier_4[0][0] = 0;
-				break;
+			tier_4[0][0] = 0;
+			break;
 			default :
-				System.out.println ("error_remove");
+			System.out.println ("error_remove");
 		}
+		int[] temp = {0,0,0};
+		updateRemovable(pos, temp, 0, 2);
 	}
-
+	
 	public boolean legalMove (int[] pos) {
 		switch(pos[0]) {
 			case 1 :
-				if(tier1_board[pos[1]][pos[2]] == 0)
-					return true;
-				else return false;
+			if(tier1_board[pos[1]][pos[2]] == 0)
+			return true;
+			else return false;
 			case 2 :
-				if(tier2_board[pos[1]][pos[2]] == 0)
-					return true;
-				else return false;
+			if(tier2_board[pos[1]][pos[2]] == 0)
+			return true;
+			else return false;
 			case 3 :
-				if(tier3_board[pos[1]][pos[2]] == 0)
-					return true;
-				else return false;
+			if(tier3_board[pos[1]][pos[2]] == 0)
+			return true;
+			else return false;
 			case 4 :
-				if(tier_4[0][0] == 0)
-					return true;
-				else return false;
+			if(tier_4[0][0] == 0)
+			return true;
+			else return false;
 		}
 		return false;
 	}
-
-
+	
+	
 	public boolean isSquare(int whichPlayer, int[] currentMove) {
 		//There are 14 possible squares (4x4, 3x3, 2x2)
 		//We don't need to check the whole board
@@ -438,4 +443,105 @@ public class Board{
 			return (hor || ver);
 		}
 	}
+	
+	//For isSquare() and isLine()
+	int[][] removable = new int[29][3]; //values, whichplayer
+	
+	//1 = insert
+	//2 = delete
+	//3 = move
+	public int[][] updateRemovable(int[] coord1, int[] coord2, int whichPlayer, int id) {
+		
+		int tier1 = coord1[0];
+		int x1 = coord1[1];
+		int y1 = coord1[2];
+		int tier2 = coord2[0];
+		int x2 = coord2[1];
+		int y2 = coord2[2];
+		
+		int cti1 = coordToInt (tier1, x1, y1);
+		int cti2 = coordToInt (tier2, x2, y2);
+		
+		//Insert
+		if (id==1) {
+			removable[cti1][1] = whichPlayer;
+			removable[cti1][2] = 1;
+			
+			if (tier1 == 2) {
+				int[] temp = {(cti1-16)/3, (cti1-16)%3}; //back to coordinates
+				removable[coordToInt(1,temp[0], temp[1])][0]++;
+				removable[coordToInt(1,temp[0]+1, temp[1])][0]++;
+				removable[coordToInt(1,temp[0], temp[1]+1)][0]++;
+				removable[coordToInt(1,temp[0]+1, temp[1]+1)][0]++;
+			}
+			else if (tier1 == 3) {
+				int[] temp = {(cti1-25)/2, (cti1-25)%2}; //back to coordinates
+				removable[coordToInt(2,temp[0], temp[1])][0]++;
+				removable[coordToInt(2,temp[0]+1, temp[1])][0]++;
+				removable[coordToInt(2,temp[0], temp[1]+1)][0]++;
+				removable[coordToInt(2,temp[0]+1, temp[1]+1)][0]++;
+			}
+		}
+		
+		else if (id == 2) {
+			removable[cti1][1] = 0;
+			removable[cti1][2] = 0;
+			
+			if (tier1 == 2) {
+				int[] temp = {(cti1-16)/3, (cti1-16)%3}; //back to coordinates
+				removable[coordToInt(1,temp[0], temp[1])][0]--;
+				removable[coordToInt(1,temp[0]+1, temp[1])][0]--;
+				removable[coordToInt(1,temp[0], temp[1]+1)][0]--;
+				removable[coordToInt(1,temp[0]+1, temp[1]+1)][0]--;
+				
+				if (removable[coordToInt(1,temp[0], temp[1])][0] == 0) 
+				removable[coordToInt(1,temp[0], temp[1])][2] = 1;
+				if (removable[coordToInt(1,temp[0]+1, temp[1])][0] == 0)
+				removable[coordToInt(1,temp[0]+1, temp[1])][2] = 1;
+				if (removable[coordToInt(1,temp[0], temp[1]+1)][0] == 0)
+				removable[coordToInt(1,temp[0], temp[1]+1)][2] = 1;
+				if (removable[coordToInt(1,temp[0]+1, temp[1]+1)][0] == 0)
+				removable[coordToInt(1,temp[0]+1, temp[1]+1)][2] = 1;
+			}
+			else if (tier1 == 3) {
+				int[] temp = {(cti1-25)/2, (cti1-25)%2}; //back to coordinates
+				removable[coordToInt(2,temp[0], temp[1])][0]--;
+				removable[coordToInt(2,temp[0]+1, temp[1])][0]--;
+				removable[coordToInt(2,temp[0], temp[1]+1)][0]--;
+				removable[coordToInt(2,temp[0]+1, temp[1]+1)][0]--;
+				
+				if (removable[coordToInt(2,temp[0], temp[1])][0] == 0) 
+				{removable[coordToInt(2,temp[0], temp[1])][2] = 1;}
+				if (removable[coordToInt(2,temp[0]+1, temp[1])][0] == 0)
+				{removable[coordToInt(2,temp[0]+1, temp[1])][2] = 1;}
+				if (removable[coordToInt(2,temp[0], temp[1]+1)][0] == 0)
+				{removable[coordToInt(2,temp[0], temp[1]+1)][2] = 1;}
+				if (removable[coordToInt(2,temp[0]+1, temp[1]+1)][0] == 0)
+				{removable[coordToInt(2,temp[0]+1, temp[1]+1)][2] = 1;}
+			}
+		}
+		return removable;
+	}
+	
+	private int coordToInt (int z, int x, int y) {
+		//x = row
+		//y = col
+		//z = which tier
+		
+		if (z==1) {
+			return ((x*4) + y);
+		}
+		else if (z==2) {
+			return (16 + (x*3) + y);
+		}
+		else if (z==3) {
+			return (25+(x*2)+y);
+		}
+		else {
+			return 29;
+		}
+	}
+	
+	
+	
 }

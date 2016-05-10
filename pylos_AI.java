@@ -49,6 +49,12 @@ public class pylos_AI {
 			}
 			System.out.println("White Balls: " + white_balls + "; Black Balls: " + black_balls);
 			board.showBoard();
+			for (int i =0; i<29; i++) {
+			for (int j=0; j<3; j++) {
+				System.out.print(board.removable[i][j] + ",");
+				}
+				System.out.println(" ");
+		}
 			changePlayer();
 			instance.checkwin();
 		}
@@ -127,7 +133,7 @@ public class pylos_AI {
 			}
 		}
 		while(good_move != true);
-		updateRemovable(translated_move, currentPlayer);
+		//board.updateRemovable(translated_move, {0,0,0}, currentPlayer, 1);
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
@@ -141,99 +147,6 @@ public class pylos_AI {
 		//Then based on player type we either do run Minimax (in case of AI's move) or we do not (in case of Human move - just place the ball)
 	}
 	
-	//For isSquare() and isLine()
-	int[][] removable = new int[29][2]; //values, whichplayer
-	
-	//0 for non-removable
-	//1 for removable by player 1, 2 for removable by player 2
-	public void updateRemovable(int[] currentMove, int whichPlayer) {
-		int x = currentMove[1];
-		int y = currentMove[2];
-		
-		if (currentMove[0] == 1) {
-			
-			if ((x==0 && y==0) || (x==3 && y==0) || (x==0 && y==3) || (x==3 && y==3)) {
-				removable[coordToInt(currentMove[0], x, y)][0] = 1;
-			}
-			else if ((x==1 && y==1) || (x==1 && y==2) || (x==2 && y==1) || (x==2 && y==2)) {
-				removable[coordToInt(currentMove[0], x, y)][0] = 4;
-			}
-			else {
-				removable[coordToInt(currentMove[0], x, y)][0] = 2;
-			}
-			removable[coordToInt(currentMove[0], x, y)][1] = whichPlayer;
-		}
-		else if (currentMove[0] == 2) {
-			int temp = coordToInt(currentMove[0], x, y);
-			removable[temp] = whichPlayer;
-			
-			//if ball is in 2nd tier, 4 balls below it cannot be removed
-			int[] temp2 = {(temp-16)/3, (temp-16)%3}; //back to coordinates
-			removable[coordToInt(1,temp2[0], temp2[1])] = 0;
-			removable[coordToInt(1,temp2[0]+1, temp2[1])] = 0;
-			removable[coordToInt(1,temp2[0], temp2[1]+1)] = 0;
-			removable[coordToInt(1,temp2[0]+1, temp2[1]+1)] = 0;
-		}
-		else if (currentMove[0] == 3) {
-			int temp = coordToInt(currentMove[0], x, y);
-			removable[temp] = whichPlayer;
-			
-			//if ball is in 3rd tier, 4 balls below it cannot be removed
-			int[] temp2 = {(temp-25)/2, (temp-25)%2}; //back to coordinates
-			removable[coordToInt(2,temp2[0], temp2[1])] = 0;
-			removable[coordToInt(2,temp2[0]+1, temp2[1])] = 0;
-			removable[coordToInt(2,temp2[0], temp2[1]+1)] = 0;
-			removable[coordToInt(2,temp2[0]+1, temp2[1]+1)] = 0;
-		}
-	}
-	
-	public void updateRemovable2(int[] currentMove, int whichPlayer) {
-		if (currentMove[0] == 1) {
-			removable[coordToInt(currentMove[0], currentMove[1], currentMove[2])] = 0;
-		}
-		else if (currentMove[0] == 2) {
-			int temp = coordToInt(currentMove[0], currentMove[1], currentMove[2]);
-			removable[temp] = 0;
-			
-			//if ball is in 2nd tier, 4 balls below it cannot be removed
-			int[] temp2 = {(temp-16)/3, (temp-16)%3}; //back to coordinates
-			removable[coordToInt(1,temp2[0], temp2[1])] = 0;
-			removable[coordToInt(1,temp2[0]+1, temp2[1])] = 0;
-			removable[coordToInt(1,temp2[0], temp2[1]+1)] = 0;
-			removable[coordToInt(1,temp2[0]+1, temp2[1]+1)] = 0;
-		}
-		else if (currentMove[0] == 3) {
-			int temp = coordToInt(currentMove[0], currentMove[1], currentMove[2]);
-			removable[temp] = whichPlayer;
-			
-			//if ball is in 3rd tier, 4 balls below it cannot be removed
-			int[] temp2 = {(temp-25)/2, (temp-25)%2}; //back to coordinates
-			removable[coordToInt(2,temp2[0], temp2[1])] = 0;
-			removable[coordToInt(2,temp2[0]+1, temp2[1])] = 0;
-			removable[coordToInt(2,temp2[0], temp2[1]+1)] = 0;
-			removable[coordToInt(2,temp2[0]+1, temp2[1]+1)] = 0;
-		}
-	}
-	
-	
-	private int coordToInt (int z, int x, int y) {
-		//x = row
-		//y = col
-		//z = which tier
-		
-		if (z==1) {
-			return ((x*4) + y);
-		}
-		else if (z==2) {
-			return (16 + (x*3) + y);
-		}
-		else if (z==3) {
-			return (25+(x*2)+y);
-		}
-		else {
-			return 29;
-		}
-	}
 	
 	public boolean checkwin() {
 		//Check for wining here - it is either when one of the players has no balls left or the one who put his ball on top of the pyramid
