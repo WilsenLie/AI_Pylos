@@ -133,11 +133,7 @@ public class pylos_AI {
 			}
 		}
 		while(good_move != true);
-<<<<<<< HEAD
-		//updateRemovable(translated_move, currentPlayer);
-=======
-		//board.updateRemovable(translated_move, {0,0,0}, currentPlayer, 1);
->>>>>>> ac2c398ab05a13f50c63aad2692d3201c7e3169c
+
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){

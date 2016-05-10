@@ -455,12 +455,9 @@ public class Board{
 		int tier1 = coord1[0];
 		int x1 = coord1[1];
 		int y1 = coord1[2];
-		int tier2 = coord2[0];
-		int x2 = coord2[1];
-		int y2 = coord2[2];
 		
 		int cti1 = coordToInt (tier1, x1, y1);
-		int cti2 = coordToInt (tier2, x2, y2);
+		int[] temp = intToCoord(cti1); //back to coordinates
 		
 		//Insert
 		if (id==1) {
@@ -468,14 +465,12 @@ public class Board{
 			removable[cti1][2] = 1;
 			
 			if (tier1 == 2) {
-				int[] temp = {(cti1-16)/3, (cti1-16)%3}; //back to coordinates
 				removable[coordToInt(1,temp[0], temp[1])][0]++;
 				removable[coordToInt(1,temp[0]+1, temp[1])][0]++;
 				removable[coordToInt(1,temp[0], temp[1]+1)][0]++;
 				removable[coordToInt(1,temp[0]+1, temp[1]+1)][0]++;
 			}
 			else if (tier1 == 3) {
-				int[] temp = {(cti1-25)/2, (cti1-25)%2}; //back to coordinates
 				removable[coordToInt(2,temp[0], temp[1])][0]++;
 				removable[coordToInt(2,temp[0]+1, temp[1])][0]++;
 				removable[coordToInt(2,temp[0], temp[1]+1)][0]++;
@@ -488,7 +483,6 @@ public class Board{
 			removable[cti1][2] = 0;
 			
 			if (tier1 == 2) {
-				int[] temp = {(cti1-16)/3, (cti1-16)%3}; //back to coordinates
 				removable[coordToInt(1,temp[0], temp[1])][0]--;
 				removable[coordToInt(1,temp[0]+1, temp[1])][0]--;
 				removable[coordToInt(1,temp[0], temp[1]+1)][0]--;
@@ -504,7 +498,6 @@ public class Board{
 				removable[coordToInt(1,temp[0]+1, temp[1]+1)][2] = 1;
 			}
 			else if (tier1 == 3) {
-				int[] temp = {(cti1-25)/2, (cti1-25)%2}; //back to coordinates
 				removable[coordToInt(2,temp[0], temp[1])][0]--;
 				removable[coordToInt(2,temp[0]+1, temp[1])][0]--;
 				removable[coordToInt(2,temp[0], temp[1]+1)][0]--;
@@ -523,7 +516,7 @@ public class Board{
 		return removable;
 	}
 	
-	private int coordToInt (int z, int x, int y) {
+	public int coordToInt (int z, int x, int y) {
 		//x = row
 		//y = col
 		//z = which tier
@@ -540,6 +533,26 @@ public class Board{
 		else {
 			return 29;
 		}
+	}
+	
+	public int[] intToCoord (int i) {
+		int[] result = new int[3];
+		if (i >= 0 && i <= 15) {
+			result[0] = 1;
+			result[1]= i/4;
+			result[2]= i%4;
+		}
+		else if (i >= 16 && i <= 24) {
+			result[0] = 2;
+			result[1]= (i-16)/3;
+			result[2]= (i-16)%3;
+		}
+		else if (i >=25 && i <= 28) {
+			result[0] = 3;
+			result[1]= (i-25)/2;
+			result[2]= (i-25)%2;
+		}
+		return result;
 	}
 	
 	
