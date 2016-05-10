@@ -39,19 +39,21 @@ public class AIPlayer {
 			int value = 0;
 			if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
 					//System.out.println("GOT LINE OR SQUARE in MAX");
-					//value = value + 50 - depth;
+					value = value + 10 - depth; //if for AI creating a its own square or line is more important
 				}
 				board.insert(possib_moves.get(i), mySymbol);
+				pylos_AI.white_balls-=1;
 				//System.out.println("SIZE MAX: " + possib_moves.size());
 				//board.showBoard();
 				value += minValue(board, depth, alpha, beta);
-				System.out.println("VALUEEEEE IN MAX: " + value);
+				//System.out.println("VALUEEEEE IN MAX: " + value);
 				if (value > alpha) {
 					alpha = value;
 					cell = possib_moves.get(i);
 				}
 				int[] cell_remove = possib_moves.get(i);
 				board.remove(cell_remove);
+				pylos_AI.white_balls+=1;
 				if (alpha >= beta) 
 					return alpha;
 		}
@@ -78,9 +80,10 @@ public class AIPlayer {
 		for (int i = 0; i < possib_moves.size(); i++) {
 				int value = 0;
 				board.insert(possib_moves.get(i), opponentSymbol);
+				pylos_AI.black_balls-=1;
 				if(board.isSquare(opponentSymbol, possib_moves.get(i)) || board.isLine(opponentSymbol, possib_moves.get(i))) {
-					System.out.println("GOT LINE OR SQUARE in MIN");
-					value = value - 20 - depth;
+					//System.out.println("GOT LINE OR SQUARE in MIN");
+					value = value - 20 - depth; //AI will try to block our lines and squares
 				}
 				//System.out.println("SIZE MIN: " + possib_moves.size());
 				//board.showBoard();
@@ -90,6 +93,7 @@ public class AIPlayer {
 					beta = value;
 				int[] cell_remove = possib_moves.get(i);
 				board.remove(cell_remove);
+				pylos_AI.black_balls+=1;
 				if (beta <= alpha) 
 					return beta;
 		}

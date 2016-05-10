@@ -346,6 +346,52 @@ public class Board{
 					return true;
 				}
 			}
+			else if (tempRow == 0) {
+				if (tier2_board[tempRow][tempCol-1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow+1][tempCol-1] == whichPlayer) {
+					return true;
+				}
+				else if (tier2_board[tempRow][tempCol+1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow+1][tempCol+1] == whichPlayer) {
+					return true;
+				}
+			}
+			else if (tempCol == 0) {
+				if (tier2_board[tempRow][tempCol+1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow+1][tempCol+1] == whichPlayer) {
+					return true;
+				}
+				else if (tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow][tempCol+1] == whichPlayer && tier2_board[tempRow-1][tempCol+1] == whichPlayer) {
+					return true;
+				}
+			}
+			else if (tempCol == 2) {
+				if (tier2_board[tempRow][tempCol-1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow+1][tempCol-1] == whichPlayer) {
+					return true;
+				}
+				else if (tier2_board[tempRow][tempCol-1] == whichPlayer && tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow-1][tempCol-1] == whichPlayer) {
+					return true;
+				}
+			}
+			else if (tempRow == 2) {
+				if (tier2_board[tempRow][tempCol-1] == whichPlayer && tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow-1][tempCol-1] == whichPlayer) {
+					return true;
+				}
+				else if (tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow][tempCol+1] == whichPlayer && tier2_board[tempRow-1][tempCol+1] == whichPlayer) {
+					return true;
+				}
+			}
+			else {
+				if (tier2_board[tempRow][tempCol-1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow+1][tempCol-1] == whichPlayer) {
+					return true;
+				}
+				else if (tier2_board[tempRow][tempCol-1] == whichPlayer && tier2_board[tempRow+1][tempCol] == whichPlayer && tier2_board[tempRow+1][tempCol-1] == whichPlayer) {
+					return true;
+				}
+				else if (tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow][tempCol+1] == whichPlayer && tier2_board[tempRow-1][tempCol+1] == whichPlayer) {
+					return true;
+				}
+				else if (tier2_board[tempRow][tempCol-1] == whichPlayer && tier2_board[tempRow-1][tempCol] == whichPlayer && tier2_board[tempRow-1][tempCol-1] == whichPlayer) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}

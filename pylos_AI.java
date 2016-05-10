@@ -11,11 +11,11 @@ public class pylos_AI {
 
 	public static AIPlayer ai_player;
 	public static Board board = new Board();
-	public static int limit = 2;
+	public static int limit = 8;
 	
 	//global variables here
-	int white_balls = 15;
-	int black_balls = 15;
+	public static int white_balls = 15;
+	public static int black_balls = 15;
 	
 	public static int currentPlayer;
 	
@@ -40,10 +40,14 @@ public class pylos_AI {
 			if(currentPlayer==1) {
 				cell = ai_player.alphaBetaSearch(board);
 				board.insert(cell, currentPlayer);
+				white_balls-=1;
 				System.out.println("AI made its move!!");
 			}
-			else instance.makeMove();
-
+			else {
+				instance.makeMove();
+				black_balls-=1;
+			}
+			System.out.println("White Balls: " + white_balls + "; Black Balls: " + black_balls);
 			board.showBoard();
 			changePlayer();
 			instance.checkwin();
