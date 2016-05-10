@@ -41,7 +41,7 @@ public class pylos_AI {
 				cell = ai_player.alphaBetaSearch(board);
 				board.insert(cell, currentPlayer);
 				white_balls-=1;
-				System.out.println("AI made its move!!");
+				System.out.println("AI made its move: {" + cell[0] + ", " + cell[1] + ", " + cell[2] + "}");
 			}
 			else {
 				instance.makeMove();
@@ -127,13 +127,23 @@ public class pylos_AI {
 			}
 		}
 		while(good_move != true);
-		updateRemovable(translated_move, currentPlayer);
+		//updateRemovable(translated_move, currentPlayer);
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
 			if (board.isLine(currentPlayer, translated_move) || board.isSquare(currentPlayer, translated_move)) {
 				//remove balls here
 				System.out.println("FOUND a line or square!!");
+				System.out.println("How many balls you want to remove (1 or 2): ");
+				int balls_to_remove = keyboard.nextInt();
+				for(int i = 1; i<=balls_to_remove; i++) {
+					System.out.println("Ball to remove number " + i + ": ");
+					String remove = keyboard.next();
+					int[] translated_remove = board.transCoordinate(remove);
+					board.remove(translated_remove);
+					black_balls+=1;
+
+				}
 			}
 		}
 		

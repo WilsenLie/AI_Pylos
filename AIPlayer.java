@@ -40,6 +40,8 @@ public class AIPlayer {
 			if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
 					//System.out.println("GOT LINE OR SQUARE in MAX");
 					value = value + 10 - depth; //if for AI creating a its own square or line is more important
+					//single loop here to check removeable list
+					//nested loop here to check possible remove combos of two balls
 				}
 				board.insert(possib_moves.get(i), mySymbol);
 				pylos_AI.white_balls-=1;
@@ -83,7 +85,7 @@ public class AIPlayer {
 				pylos_AI.black_balls-=1;
 				if(board.isSquare(opponentSymbol, possib_moves.get(i)) || board.isLine(opponentSymbol, possib_moves.get(i))) {
 					//System.out.println("GOT LINE OR SQUARE in MIN");
-					value = value - 20 - depth; //AI will try to block our lines and squares
+					//value = value - 20 - depth; //AI will try to block our lines and squares
 				}
 				//System.out.println("SIZE MIN: " + possib_moves.size());
 				//board.showBoard();
