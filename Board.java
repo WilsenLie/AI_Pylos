@@ -94,7 +94,7 @@ public class Board{
 			System.out.println ("error_insert");
 		}
 		int[] temp = {0,0,0};
-		updateRemovable(pos, temp, whichPlayer, 1);
+		//updateRemovable(pos, temp, whichPlayer, 1);
 		
 	}
 	
@@ -220,7 +220,7 @@ public class Board{
 			System.out.println ("error_remove");
 		}
 		int[] temp = {0,0,0};
-		updateRemovable(pos, temp, 0, 2);
+		//updateRemovable(pos, temp, 0, 2);
 	}
 	
 	public boolean legalMove (int[] pos) {
@@ -445,12 +445,12 @@ public class Board{
 	}
 	
 	//For isSquare() and isLine()
-	int[][] removable = new int[29][3]; //values, whichplayer
+	int[][] removable = new int[50][3]; //values, whichplayer
 	
 	//1 = insert
 	//2 = delete
 	//3 = move
-	public int[][] updateRemovable(int[] coord1, int[] coord2, int whichPlayer, int id) {
+	public int[][] updateRemovable(int[] coord1, int whichPlayer, int id) {
 		
 		int tier1 = coord1[0];
 		int x1 = coord1[1];

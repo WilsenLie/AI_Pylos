@@ -11,11 +11,12 @@ public class pylos_AI {
 
 	public static AIPlayer ai_player;
 	public static Board board = new Board();
-	public static int limit = 8;
+	public static int limit = 2;
 	
 	//global variables here
 	public static int white_balls = 15;
 	public static int black_balls = 15;
+	public static int[] cell_to_remove = {0,0,0};
 	
 	public static int currentPlayer;
 	
@@ -40,8 +41,16 @@ public class pylos_AI {
 			if(currentPlayer==1) {
 				cell = ai_player.alphaBetaSearch(board);
 				board.insert(cell, currentPlayer);
+				board.updateRemovable(cell, 1, 1);
 				white_balls-=1;
 				System.out.println("AI made its move: {" + cell[0] + ", " + cell[1] + ", " + cell[2] + "}");
+				if(cell_to_remove[0] != 0) {
+					board.remove(cell_to_remove);
+					board.updateRemovable(cell_to_remove, 1, 2);
+					System.out.println("AI REMOVED!!!!!! {" + cell_to_remove[0] + " " + cell_to_remove[1] + " " + cell_to_remove[2]);
+					int[] temp = {0,0,0};
+					cell_to_remove = temp;
+				}
 			}
 			else {
 				instance.makeMove();
@@ -49,12 +58,12 @@ public class pylos_AI {
 			}
 			System.out.println("White Balls: " + white_balls + "; Black Balls: " + black_balls);
 			board.showBoard();
-			for (int i =0; i<29; i++) {
-			for (int j=0; j<3; j++) {
-				System.out.print(board.removable[i][j] + ",");
-				}
-				System.out.println(" ");
-		}
+			//for (int i =0; i<29; i++) {
+			//for (int j=0; j<3; j++) {
+				//System.out.print(board.removable[i][j] + ",");
+				//}
+			//	System.out.println(" ");
+		//}
 			changePlayer();
 			instance.checkwin();
 		}
@@ -126,6 +135,7 @@ public class pylos_AI {
 		
 			if(board.legalMove(translated_move)) {
 				board.insert(translated_move, currentPlayer);
+				board.updateRemovable(translated_move, 2, 1);
 				good_move = true;
 			}
 			else {
@@ -147,6 +157,7 @@ public class pylos_AI {
 					String remove = keyboard.next();
 					int[] translated_remove = board.transCoordinate(remove);
 					board.remove(translated_remove);
+					board.updateRemovable(translated_remove, 2, 2);
 					black_balls+=1;
 
 				}
