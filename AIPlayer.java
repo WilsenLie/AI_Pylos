@@ -63,7 +63,7 @@ public class AIPlayer {
 								alpha = value;
 								cell = possib_moves.get(i);
 								if(depth == 1) {
-									pylos_AI.cell_to_remove = removed_cell;
+									pylos_AI.cell_to_remove_1 = removed_cell;
 								}
 							}
 							board.insert(removed_cell, 1);
@@ -72,6 +72,40 @@ public class AIPlayer {
 						}
 						//System.out.println("I WANT TO REMOVE: {" + removed_cell[0] + " " + removed_cell[1] + " " + removed_cell[2]);
 					}
+
+					for(int k = 0; k<28; k++) {
+						for(int j = k+1; j<29; j++) {
+							int[] removed_cell_1 = board.intToCoord(k);
+							int[] removed_cell_2 = board.intToCoord(j);
+							if(toremove[k][1] == 1 && toremove[k][2]==1 && toremove[j][1] == 1 && toremove[j][2] == 1) {
+								value = 0;
+							value = value + 100- depth; //if for AI creating a its own square or line is more important
+							board.remove(removed_cell_1);
+							board.updateRemovable(removed_cell_1, 1, 2);
+							board.remove(removed_cell_2);
+							board.updateRemovable(removed_cell_1, 1, 2);
+							pylos_AI.white_balls+=2;
+							value+=10;
+							value += minValue(board, depth, alpha, beta);
+							if (value > alpha) {
+								//System.out.println("SET ALPHA TO: " + value);
+								alpha = value;
+								cell = possib_moves.get(i);
+								if(depth == 1) {
+									pylos_AI.cell_to_remove_1 = removed_cell_1;
+									pylos_AI.cell_to_remove_2 = removed_cell_2;
+								}
+							}
+							board.insert(removed_cell_1, 1);
+							board.updateRemovable(removed_cell_1, 1, 1);
+							board.insert(removed_cell_2, 1);
+							board.updateRemovable(removed_cell_2, 1, 1);
+							pylos_AI.white_balls-=2;
+						}
+						//System.out.println("I WANT TO REMOVE: {" + removed_cell[0] + " " + removed_cell[1] + " " + removed_cell[2]);
+						}
+					}
+
 					int[] cell_remove = possib_moves.get(i);
 					board.remove(cell_remove);
 					board.updateRemovable(cell_remove, 1, 2);
@@ -90,7 +124,8 @@ public class AIPlayer {
 						alpha = value;
 						cell = possib_moves.get(i);
 						int[] blah = {0,0,0};
-						pylos_AI.cell_to_remove = blah;
+						pylos_AI.cell_to_remove_1 = blah;
+						pylos_AI.cell_to_remove_2 = blah;
 					}
 					int[] cell_remove = possib_moves.get(i);
 					board.remove(cell_remove);

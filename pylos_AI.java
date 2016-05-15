@@ -16,7 +16,8 @@ public class pylos_AI {
 	//global variables here
 	public static int white_balls = 15;
 	public static int black_balls = 15;
-	public static int[] cell_to_remove = {0,0,0};
+	public static int[] cell_to_remove_1 = {0,0,0};
+	public static int[] cell_to_remove_2 = {0,0,0};
 	
 	public static int currentPlayer;
 	
@@ -44,13 +45,21 @@ public class pylos_AI {
 				board.updateRemovable(cell, 1, 1);
 				white_balls-=1;
 				System.out.println("AI made its move: {" + cell[0] + ", " + cell[1] + ", " + cell[2] + "}");
-				if(cell_to_remove[0] != 0) {
-					board.remove(cell_to_remove);
-					board.updateRemovable(cell_to_remove, 1, 2);
-					System.out.println("AI REMOVED!!!!!! {" + cell_to_remove[0] + " " + cell_to_remove[1] + " " + cell_to_remove[2]);
+				if(cell_to_remove_1[0] != 0) {
+					board.remove(cell_to_remove_1);
+					board.updateRemovable(cell_to_remove_2, 1, 2);
+					System.out.println("AI REMOVED 1!!!!!! {" + cell_to_remove_1[0] + " " + cell_to_remove_1[1] + " " + cell_to_remove_1[2]);
 					white_balls+=1;
 					int[] temp = {0,0,0};
-					cell_to_remove = temp;
+					cell_to_remove_1 = temp;
+				}
+				if(cell_to_remove_2[0] != 0) {
+					board.remove(cell_to_remove_2);
+					board.updateRemovable(cell_to_remove_2, 1, 2);
+					System.out.println("AI REMOVED 2!!!!!! {" + cell_to_remove_2[0] + " " + cell_to_remove_2[1] + " " + cell_to_remove_2[2]);
+					white_balls+=1;
+					int[] temp = {0,0,0};
+					cell_to_remove_2 = temp;
 				}
 			}
 			else {
