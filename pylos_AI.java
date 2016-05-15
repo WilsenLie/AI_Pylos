@@ -11,7 +11,7 @@ public class pylos_AI {
 
 	public static AIPlayer ai_player;
 	public static Board board = new Board();
-	public static int limit = 2;
+	public static int limit = 4;
 	
 	//global variables here
 	public static int white_balls = 15;
@@ -48,6 +48,7 @@ public class pylos_AI {
 					board.remove(cell_to_remove);
 					board.updateRemovable(cell_to_remove, 1, 2);
 					System.out.println("AI REMOVED!!!!!! {" + cell_to_remove[0] + " " + cell_to_remove[1] + " " + cell_to_remove[2]);
+					white_balls+=1;
 					int[] temp = {0,0,0};
 					cell_to_remove = temp;
 				}

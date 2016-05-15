@@ -40,19 +40,19 @@ public class AIPlayer {
 				//System.out.println("STARTER LOOPING POSSIBLE MOVES");
 				int value = 0;
 				board.insert(possib_moves.get(i), mySymbol);
+				int[][] toremove = board.updateRemovable(possib_moves.get(i), 1, 1);
 				if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
 					if (depth==1) {
 						System.out.println("AI CAN REMOVE NEXT MOVE");
 					}
 					//single loop here to check removeable list
 					//board.insert(possib_moves.get(i), mySymbol);
-					int[][] toremove = board.updateRemovable(possib_moves.get(i), 1, 1);
 					pylos_AI.white_balls-=1;
 					for(int k = 0; k<29; k++) {
 						int[] removed_cell = board.intToCoord(k);
 						if(toremove[k][1] == 1 && toremove[k][2]==1) {
 							value = 0;
-							value = value + 30- depth; //if for AI creating a its own square or line is more important
+							value = value + 100- depth; //if for AI creating a its own square or line is more important
 							board.remove(removed_cell);
 							board.updateRemovable(removed_cell, 1, 2);
 							pylos_AI.white_balls+=1;
@@ -83,7 +83,7 @@ public class AIPlayer {
 				}
 				else {
 					//board.insert(possib_moves.get(i), mySymbol);
-					board.updateRemovable(possib_moves.get(i), 1, 1);
+					//board.updateRemovable(possib_moves.get(i), 1, 1);
 					pylos_AI.white_balls-=1;
 					value += minValue(board, depth, alpha, beta);
 					if (value > alpha) {
