@@ -11,7 +11,7 @@ public class pylos_AI {
 
 	public static AIPlayer ai_player;
 	public static Board board = new Board();
-	public static int limit = 4;
+	public static int limit = 6;
 	
 	//global variables here
 	public static int white_balls = 15;

@@ -24,7 +24,7 @@ public class AIPlayer {
 		//System.out.println("MAX started");
 		if (board.isWin() != 0) 
 			if (board.isWin() == mySymbol)
-				return 255 - depth;
+				return 2505 - depth;
 			else return 0 + depth; 
 		//check if the depth has reached its limit or if the 
 		//board is in a terminal (tie) state and return its utility value.
@@ -43,7 +43,7 @@ public class AIPlayer {
 				int[][] toremove = board.updateRemovable(possib_moves.get(i), 1, 1);
 				if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
 					if (depth==1) {
-						System.out.println("AI CAN REMOVE NEXT MOVE");
+						//System.out.println("AI CAN REMOVE NEXT MOVE");
 					}
 					//single loop here to check removeable list
 					//board.insert(possib_moves.get(i), mySymbol);
@@ -52,7 +52,7 @@ public class AIPlayer {
 						int[] removed_cell = board.intToCoord(k);
 						if(toremove[k][1] == 1 && toremove[k][2]==1) {
 							value = 0;
-							value = value + 100- depth; //if for AI creating a its own square or line is more important
+							value = value + 150- depth; //if for AI creating a its own square or line is more important
 							board.remove(removed_cell);
 							board.updateRemovable(removed_cell, 1, 2);
 							pylos_AI.white_balls+=1;
@@ -72,14 +72,14 @@ public class AIPlayer {
 						}
 						//System.out.println("I WANT TO REMOVE: {" + removed_cell[0] + " " + removed_cell[1] + " " + removed_cell[2]);
 					}
-
+					
 					for(int k = 0; k<28; k++) {
 						for(int j = k+1; j<29; j++) {
 							int[] removed_cell_1 = board.intToCoord(k);
 							int[] removed_cell_2 = board.intToCoord(j);
 							if(toremove[k][1] == 1 && toremove[k][2]==1 && toremove[j][1] == 1 && toremove[j][2] == 1) {
 								value = 0;
-							value = value + 100- depth; //if for AI creating a its own square or line is more important
+							value = value + 150- depth; //if for AI creating a its own square or line is more important
 							board.remove(removed_cell_1);
 							board.updateRemovable(removed_cell_1, 1, 2);
 							board.remove(removed_cell_2);
@@ -112,7 +112,7 @@ public class AIPlayer {
 					pylos_AI.white_balls+=1;
 					if (alpha >= beta) 
 						return alpha;
-					System.out.println("VALUE IN AI SQUARE: " + value);
+					//System.out.println("VALUE IN AI SQUARE: " + value);
 					//nested loop here to check possible remove combos of two balls
 				}
 				else {
@@ -135,7 +135,7 @@ public class AIPlayer {
 						return alpha;
 				}
 			}
-			System.out.println("FINAL ALPHA: " + alpha);
+			//System.out.println("FINAL ALPHA: " + alpha);
 			maxCell = cell;
 			return alpha;
 		}
@@ -147,7 +147,7 @@ public class AIPlayer {
 		//System.out.println("MIN started");
 			if (board.isWin() != 0)
 				if (board.isWin() == mySymbol)
-					return 255 - depth;
+					return 2505 - depth;
 				else return 0 + depth;
 		//check if the depth has reached its limit or if the 
 		//board is in a terminal (tie) state and return its utility value.
@@ -159,13 +159,41 @@ public class AIPlayer {
 				for (int i = 0; i < possib_moves.size(); i++) {
 					int value = 0;
 					board.insert(possib_moves.get(i), opponentSymbol);
-					board.updateRemovable(possib_moves.get(i), 2, 1);
-					pylos_AI.black_balls-=1;
+					int[][] toremove = board.updateRemovable(possib_moves.get(i), 2,1);
+					//board.updateRemovable(possib_moves.get(i), 2, 1);
+					//pylos_AI.black_balls-=1;
 					if(board.isSquare(opponentSymbol, possib_moves.get(i)) || board.isLine(opponentSymbol, possib_moves.get(i))) {
-					value = value - 80 - depth; //AI will try to block our lines and squares
+					//value = value - 80 - depth; //AI will try to block our lines and squares
+						pylos_AI.black_balls-=1;
+						for (int k = 0; k<29; k++) {
+							int[] removed_cell = board.intToCoord(k);
+							if(toremove[k][1] == 2 && toremove[k][2] == 1) {
+								value = 0;
+								value = value - 100 - depth;
+								board.remove(removed_cell);
+								board.updateRemovable(removed_cell, 2, 2);
+								pylos_AI.black_balls+=1;
+								value+=5;
+								value += maxValue(board, depth, alpha, beta);
+								if (value < beta) {
+									beta = value;
+								}
+								board.insert(removed_cell, 2);
+								board.updateRemovable(removed_cell, 2, 1);
+								pylos_AI.black_balls-=1;
+							}
+						}
+						int[] cell_remove = possib_moves.get(i);
+						board.remove(cell_remove);
+						board.updateRemovable(cell_remove, 2, 2);
+						pylos_AI.black_balls+=1;
+						if (beta <= alpha)
+							return beta;
 					}
+					else {
 				//System.out.println("SIZE MIN: " + possib_moves.size());
 				//board.showBoard();
+						pylos_AI.black_balls-=1;
 					value += maxValue(board, depth, alpha, beta);
 				//System.out.println("VALUEEEEE IN MIN: " + value);
 					if (value < beta)
@@ -176,6 +204,7 @@ public class AIPlayer {
 					pylos_AI.black_balls+=1;
 					if (beta <= alpha) 
 						return beta;
+				}
 				}
 				return beta;
 			}
