@@ -410,7 +410,7 @@ public class Board{
 		boolean hor = true;
 		boolean ver = true;
 		
-		if (findTier >=0 && findTier <=3) {
+		if (findTier == 1) {
 			//in 1st tier 4x4
 			for (i=0; i<4; i++) { //horizontal
 				if (tier1_board[tempRow][i] != whichPlayer) {
@@ -426,7 +426,7 @@ public class Board{
 			}
 			return (hor || ver);
 		}
-		else {
+		else if (findTier == 2){
 			//in 2nd tier 3x3
 			for (i=0; i<3; i++) { //horizontal
 				if (tier2_board[tempRow][i] != whichPlayer) {
@@ -441,6 +441,9 @@ public class Board{
 				}
 			}
 			return (hor || ver);
+		}
+		else if (findTier > 3) {
+			return false;
 		}
 	}
 	
