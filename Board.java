@@ -419,7 +419,7 @@ public class Board{
 				}
 			}
 			for (i=0; i<4; i++) { //vertical
-				if (tier1_board[(tempRow+i)%4][tempCol] != whichPlayer) {
+				if (tier1_board[i][tempCol] != whichPlayer) {
 					ver = false;
 					break;
 				}
@@ -435,7 +435,7 @@ public class Board{
 				}
 			}
 			for (i=0; i<3; i++) { //vertical
-				if (tier2_board[(tempRow+i)%3][tempCol] != whichPlayer) {
+				if (tier2_board[i][tempCol] != whichPlayer) {
 					ver = false;
 					break;
 				}
@@ -445,6 +445,7 @@ public class Board{
 		else if (findTier > 3) {
 			return false;
 		}
+		return false;
 	}
 	
 	//For isSquare() and isLine()

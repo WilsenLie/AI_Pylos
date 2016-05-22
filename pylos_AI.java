@@ -4,30 +4,32 @@
 	*This is the implementation of Minimax (or Negamax may be) algorithm with alpha beta pruning
 */
 
-import java.util.*;
-import java.io.*;
+	import java.util.*;
+	import java.io.*;
 
-public class pylos_AI {
+	public class pylos_AI {
 
-	public static AIPlayer ai_player;
-	public static Board board = new Board();
-	public static int limit = 6;
-	
+		public static AIPlayer ai_player;
+		public static Board board = new Board();
+		public static int limit = 4;
+
 	//global variables here
-	public static int white_balls = 15;
-	public static int black_balls = 15;
-	public static int[] cell_to_remove_1 = {0,0,0};
-	public static int[] cell_to_remove_2 = {0,0,0};
-	
-	public static int currentPlayer;
-	
-	String moveType = "add";
-	
-	String color = "white";
-	int position = 20;
-	
-	public static boolean win = false;
-	
+		public static int white_balls = 15;
+		public static int black_balls = 15;
+		public static int[] cell_to_remove_1 = {0,0,0};
+		public static int[] cell_to_remove_2 = {0,0,0};
+		public static boolean up_tier = false;
+		public static int[] from = {0,0,0};
+
+		public static int currentPlayer;
+
+		String moveType = "add";
+
+		String color = "white";
+		int position = 20;
+
+		public static boolean win = false;
+
 	long duration = 0; //The timing of the AI's move
 	
 	public static void main(String[] args) {
@@ -41,10 +43,21 @@ public class pylos_AI {
 		do {
 			if(currentPlayer==1) {
 				cell = ai_player.alphaBetaSearch(board);
+				if(up_tier == true && from[0] != 0) {
+					board.remove(from);
+					board.updateRemovable(from, 1, 2);
+					board.insert(cell, currentPlayer);
+					board.updateRemovable(cell, 1, 1);
+					System.out.println("AI MOVED UP");
+
+					up_tier = false;
+				}
+				else {
 				board.insert(cell, currentPlayer);
 				board.updateRemovable(cell, 1, 1);
 				white_balls-=1;
 				System.out.println("AI made its move: {" + cell[0] + ", " + cell[1] + ", " + cell[2] + "}");
+			}
 				if(cell_to_remove_1[0] != 0) {
 					board.remove(cell_to_remove_1);
 					board.updateRemovable(cell_to_remove_2, 1, 2);
@@ -61,6 +74,12 @@ public class pylos_AI {
 					int[] temp = {0,0,0};
 					cell_to_remove_2 = temp;
 				}
+				for(int i = 0; i<29; i++) {
+					for(int j = 0; j<3; j++) {
+						System.out.print(board.removable[i][j]);
+					}
+					System.out.println();
+					}
 			}
 			else {
 				instance.makeMove();
@@ -82,7 +101,7 @@ public class pylos_AI {
 
 	public static void changePlayer() {
 		if (currentPlayer == 1) 
-				currentPlayer = 2;
+			currentPlayer = 2;
 		else currentPlayer = 1;
 	}
 	
@@ -134,22 +153,39 @@ public class pylos_AI {
 	
 	public void makeMove() {
 		System.out.println("Please make a move in the followin format: \n The bottom tier is squares: [a,b,c,d][1-4], \n The second tier up is squares: [e,f,g][1-3], \n The third tier up is squares: [h,i][1-2], \n The top tier is square j1.");
+		System.out.println("=======The move is in the format: coord1 coord2. If you wish to use new ball type: 0 coord1 \n if you wish to move the ball to upper tier type: coord1 coord2 - where coord1 - ball to move, coord2 - to where you move it");
 		Scanner keyboard = new Scanner(System.in);
 		String move;
-		int[] translated_move;
+		int[] translated_move_1;
+		int[] translated_move_2;
 		boolean good_move = false;
 		do {
-		System.out.println("Your move: ");
-		move = keyboard.next();
-		translated_move = board.transCoordinate(move);
-		
-			if(board.legalMove(translated_move)) {
-				board.insert(translated_move, currentPlayer);
-				board.updateRemovable(translated_move, 2, 1);
-				good_move = true;
+			System.out.println("Your move: ");
+			move = keyboard.nextLine();
+			String[] splited = move.split("\\s+");
+			System.out.println(splited[0] + " +++++ " + splited[1]);
+		//if(splited[0].equals("0")) {System.out.println("ZEROOOOOOO");}
+			if(splited[0].equals("0")) {
+				translated_move_2 = board.transCoordinate(splited[1]);
+
+				if(board.legalMove(translated_move_2)) {
+					board.insert(translated_move_2, currentPlayer);
+					board.updateRemovable(translated_move_2, 2, 1);
+					good_move = true;
+				}
+				else {
+					System.out.println("Cell is occupied");
+				}
 			}
-			else {
-				System.out.println("Cell is occupied");
+			else { // move up - works
+				translated_move_1 = board.transCoordinate(splited[0]);
+				translated_move_2 = board.transCoordinate(splited[1]);
+				board.remove(translated_move_1);
+				board.updateRemovable(translated_move_1, 2, 2);
+				board.insert(translated_move_2, currentPlayer);
+				board.updateRemovable(translated_move_2, 2, 1);
+				System.out.println("YOU MOVED BALL TO UPPER TIER");
+				good_move = true;
 			}
 		}
 		while(good_move != true);
@@ -157,7 +193,7 @@ public class pylos_AI {
 		
 		//Check isLine() and isSquare if player puts in 1st or 2nd tier
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
-			if (board.isLine(currentPlayer, translated_move) || board.isSquare(currentPlayer, translated_move)) {
+			if (board.isLine(currentPlayer, translated_move_2) || board.isSquare(currentPlayer, translated_move_2)) {
 				//remove balls here
 				System.out.println("FOUND a line or square!!");
 				System.out.println("How many balls you want to remove (1 or 2): ");
