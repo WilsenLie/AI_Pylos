@@ -60,7 +60,7 @@
 			}
 				if(cell_to_remove_1[0] != 0) {
 					board.remove(cell_to_remove_1);
-					board.updateRemovable(cell_to_remove_2, 1, 2);
+					board.updateRemovable(cell_to_remove_1, 1, 2);
 					System.out.println("AI REMOVED 1!!!!!! {" + cell_to_remove_1[0] + " " + cell_to_remove_1[1] + " " + cell_to_remove_1[2]);
 					white_balls+=1;
 					int[] temp = {0,0,0};
