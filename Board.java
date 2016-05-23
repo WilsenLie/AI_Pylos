@@ -213,14 +213,10 @@ public class Board{
 			case 3 :
 			tier3_board[pos[1]][pos[2]] = 0;
 			break;
-			case 4 :
-			tier_4[0][0] = 0;
-			break;
 			default :
 			System.out.println ("error_remove");
 		}
-		int[] temp = {0,0,0};
-		//updateRemovable(pos, temp, 0, 2);
+		//updateRemovable(pos, 0, 2);
 	}
 	
 	public boolean legalMove (int[] pos) {
@@ -449,7 +445,8 @@ public class Board{
 	}
 	
 	//For isSquare() and isLine()
-	int[][] removable = new int[50][3]; //values, whichplayer
+	//change from 50 to 30
+	int[][] removable = new int[30][3]; //values, whichplayer
 	
 	//1 = insert
 	//2 = delete
@@ -457,10 +454,8 @@ public class Board{
 	public int[][] updateRemovable(int[] coord1, int whichPlayer, int id) {
 		
 		int tier1 = coord1[0];
-		int x1 = coord1[1];
-		int y1 = coord1[2];
-		
-		int cti1 = coordToInt (tier1, x1, y1);
+		//kinda silly, don't need to use temp
+		int cti1 = coordToInt (tier1, coord1[1], coord1[2]);
 		int[] temp = intToCoord(cti1); //back to coordinates
 		
 		//Insert
@@ -469,52 +464,52 @@ public class Board{
 			removable[cti1][2] = 1;
 			
 			if (tier1 == 2) {
-				removable[coordToInt(1,temp[0], temp[1])][0]++;
-				removable[coordToInt(1,temp[0]+1, temp[1])][0]++;
-				removable[coordToInt(1,temp[0], temp[1]+1)][0]++;
-				removable[coordToInt(1,temp[0]+1, temp[1]+1)][0]++;
+				removable[coordToInt(1,temp[1], temp[2])][0]++;
+				removable[coordToInt(1,temp[1]+1, temp[2])][0]++;
+				removable[coordToInt(1,temp[1], temp[2]+1)][0]++;
+				removable[coordToInt(1,temp[1]+1, temp[2]+1)][0]++;
 			}
 			else if (tier1 == 3) {
-				removable[coordToInt(2,temp[0], temp[1])][0]++;
-				removable[coordToInt(2,temp[0]+1, temp[1])][0]++;
-				removable[coordToInt(2,temp[0], temp[1]+1)][0]++;
-				removable[coordToInt(2,temp[0]+1, temp[1]+1)][0]++;
+				removable[coordToInt(2,temp[1], temp[2])][0]++;
+				removable[coordToInt(2,temp[1]+1, temp[2])][0]++;
+				removable[coordToInt(2,temp[1], temp[2]+1)][0]++;
+				removable[coordToInt(2,temp[1]+1, temp[2]+1)][0]++;
 			}
 		}
-		
+		//remove
 		else if (id == 2) {
 			removable[cti1][1] = 0;
 			removable[cti1][2] = 0;
 			
 			if (tier1 == 2) {
-				removable[coordToInt(1,temp[0], temp[1])][0]--;
-				removable[coordToInt(1,temp[0]+1, temp[1])][0]--;
-				removable[coordToInt(1,temp[0], temp[1]+1)][0]--;
-				removable[coordToInt(1,temp[0]+1, temp[1]+1)][0]--;
+				removable[coordToInt(1,temp[1], temp[2])][0]--;
+				removable[coordToInt(1,temp[1]+1, temp[2])][0]--;
+				removable[coordToInt(1,temp[1], temp[2]+1)][0]--;
+				removable[coordToInt(1,temp[1]+1, temp[2]+1)][0]--;
 				
-				if (removable[coordToInt(1,temp[0], temp[1])][0] == 0) 
-				removable[coordToInt(1,temp[0], temp[1])][2] = 1;
-				if (removable[coordToInt(1,temp[0]+1, temp[1])][0] == 0)
-				removable[coordToInt(1,temp[0]+1, temp[1])][2] = 1;
-				if (removable[coordToInt(1,temp[0], temp[1]+1)][0] == 0)
-				removable[coordToInt(1,temp[0], temp[1]+1)][2] = 1;
-				if (removable[coordToInt(1,temp[0]+1, temp[1]+1)][0] == 0)
-				removable[coordToInt(1,temp[0]+1, temp[1]+1)][2] = 1;
+				if (removable[coordToInt(1,temp[1], temp[2])][0] == 0) 
+				removable[coordToInt(1,temp[1], temp[2])][2] = 1;
+				if (removable[coordToInt(1,temp[1]+1, temp[2])][0] == 0)
+				removable[coordToInt(1,temp[1]+1, temp[2])][2] = 1;
+				if (removable[coordToInt(1,temp[1], temp[2]+1)][0] == 0)
+				removable[coordToInt(1,temp[1], temp[2]+1)][2] = 1;
+				if (removable[coordToInt(1,temp[1]+1, temp[2]+1)][0] == 0)
+				removable[coordToInt(1,temp[1]+1, temp[2]+1)][2] = 1;
 			}
 			else if (tier1 == 3) {
-				removable[coordToInt(2,temp[0], temp[1])][0]--;
-				removable[coordToInt(2,temp[0]+1, temp[1])][0]--;
-				removable[coordToInt(2,temp[0], temp[1]+1)][0]--;
-				removable[coordToInt(2,temp[0]+1, temp[1]+1)][0]--;
+				removable[coordToInt(2,temp[1], temp[2])][0]--;
+				removable[coordToInt(2,temp[1]+1, temp[2])][0]--;
+				removable[coordToInt(2,temp[1], temp[2]+1)][0]--;
+				removable[coordToInt(2,temp[1]+1, temp[2]+1)][0]--;
 				
-				if (removable[coordToInt(2,temp[0], temp[1])][0] == 0) 
-				{removable[coordToInt(2,temp[0], temp[1])][2] = 1;}
-				if (removable[coordToInt(2,temp[0]+1, temp[1])][0] == 0)
-				{removable[coordToInt(2,temp[0]+1, temp[1])][2] = 1;}
-				if (removable[coordToInt(2,temp[0], temp[1]+1)][0] == 0)
-				{removable[coordToInt(2,temp[0], temp[1]+1)][2] = 1;}
-				if (removable[coordToInt(2,temp[0]+1, temp[1]+1)][0] == 0)
-				{removable[coordToInt(2,temp[0]+1, temp[1]+1)][2] = 1;}
+				if (removable[coordToInt(2,temp[1], temp[2])][0] == 0) 
+				{removable[coordToInt(2,temp[1], temp[2])][2] = 1;}
+				if (removable[coordToInt(2,temp[1]+1, temp[2])][0] == 0)
+				{removable[coordToInt(2,temp[1]+1, temp[2])][2] = 1;}
+				if (removable[coordToInt(2,temp[1], temp[2]+1)][0] == 0)
+				{removable[coordToInt(2,temp[1], temp[2]+1)][2] = 1;}
+				if (removable[coordToInt(2,temp[1]+1, temp[2]+1)][0] == 0)
+				{removable[coordToInt(2,temp[1]+1, temp[2]+1)][2] = 1;}
 			}
 		}
 		return removable;
