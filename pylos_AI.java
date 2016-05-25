@@ -51,8 +51,9 @@
 					board.insert(cell, currentPlayer);
 					board.updateRemovable(cell, 1, 1);
 					System.out.println("AI MOVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED UP");
-
 					up_tier = false;
+					int temp[] = {0,0,0};
+					from = temp;
 				}
 				else {
 				board.insert(cell, currentPlayer);

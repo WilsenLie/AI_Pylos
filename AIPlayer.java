@@ -44,7 +44,7 @@ public class AIPlayer {
 			int[] current_move = possib_moves.get(i);
 //MOVE UP CHECK===================================================================================================================================
 			if (current_move[0] == 2 || current_move[0] == 3) {
-				value+=1000;
+				value+=100;
 				board.insert(current_move, mySymbol);
 				int[][] temp_rem = board.updateRemovable(current_move, 1, 1);
 				board.remove(current_move);
@@ -128,7 +128,7 @@ public class AIPlayer {
 								return alpha;
 						}
 						else {
-							value+=1000;
+							value+=100;
 							value += minValue(board, depth, alpha, beta);
 							if (value > alpha) {
 								alpha = value;
@@ -159,16 +159,16 @@ public class AIPlayer {
 				//board.updateRemovable(current_move, 1, 2);
 			}
 //====================================================================================================================================
-				board.insert(possib_moves.get(i), mySymbol);
-				int[][] toremove = board.updateRemovable(possib_moves.get(i), 1, 1);
+			board.insert(possib_moves.get(i), mySymbol);
+			int[][] toremove = board.updateRemovable(possib_moves.get(i), 1, 1);
 //BOARD SQUARE CHECK==================================================================================================================
-				if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
-					pylos_AI.white_balls-=1;
-					for(int k = 0; k<29; k++) {
-						int[] removed_cell = board.intToCoord(k);
-						if(toremove[k][1] == 1 && toremove[k][2]==1) {
-							value = 0;
-							value = value + 150- depth; //if for AI creating a its own square or line is more important
+			if(board.isSquare(mySymbol, possib_moves.get(i)) || board.isLine(mySymbol, possib_moves.get(i))) {
+				pylos_AI.white_balls-=1;
+				for(int k = 0; k<29; k++) {
+					int[] removed_cell = board.intToCoord(k);
+					if(toremove[k][1] == 1 && toremove[k][2]==1) {
+						value = 0;
+							value = value + 500- depth; //if for AI creating a its own square or line is more important
 							board.remove(removed_cell);
 							board.updateRemovable(removed_cell, 1, 2);
 							pylos_AI.white_balls+=1;
@@ -196,7 +196,7 @@ public class AIPlayer {
 							int[] removed_cell_2 = board.intToCoord(j);
 							if(toremove[k][1] == 1 && toremove[k][2]==1 && toremove[j][1] == 1 && toremove[j][2] == 1) {
 								value = 0;
-								value = value + 150- depth; //if for AI creating a its own square or line is more important
+								value = value + 700- depth; //if for AI creating a its own square or line is more important
 								board.remove(removed_cell_1);
 								board.updateRemovable(removed_cell_1, 1, 2);
 								board.remove(removed_cell_2);
@@ -254,9 +254,9 @@ public class AIPlayer {
 				}
 			}
 		//System.out.println("FINAL ALPHA: " + alpha);
-		maxCell = cell;
-		return alpha;
-	}
+			maxCell = cell;
+			return alpha;
+		}
 
 		private int minValue(Board board, int depth, int alpha, int beta) {
 		//check if the board is in a terminal (winning) state and
@@ -276,18 +276,106 @@ public class AIPlayer {
 				possib_moves = board.possibleMoves();
 				for (int i = 0; i < possib_moves.size(); i++) {
 					int value = 0;
+
+					int[] current_move = possib_moves.get(i);
+//MOVE UP CHECK================================================================================================================================
+					if(current_move[0] == 2 || current_move[0] == 3) {
+						value-=100;
+						board.insert(current_move, opponentSymbol);
+						int[][] temp_rem = board.updateRemovable(current_move, 2, 1);
+						board.remove(current_move);
+						board.updateRemovable(current_move, 2, 2);
+						for(int k = 0; k<29; k++) {
+							board.insert(current_move, opponentSymbol);
+							board.updateRemovable(current_move, 2, 1);
+							int[] current_ball = board.intToCoord(k);
+							if(board.removable[k][1] == 2 && board.removable[k][0] == 0 && current_ball[0] == current_move[0]-1) {
+								current_ball = board.intToCoord(k);
+								board.remove(current_ball);
+								int[][] toremove = board.updateRemovable(current_ball, 2, 2);
+								if(board.isSquare(opponentSymbol, possib_moves.get(i)) || board.isLine(opponentSymbol, possib_moves.get(i))) {
+									for (int n = 0; n<29; n++) {
+										int[] removed_cell = board.intToCoord(n);
+										if(toremove[n][1] == 2 && toremove[n][0] == 0) {
+											value = 0;
+											value = value - 140 - depth;
+											board.remove(removed_cell);
+											board.updateRemovable(removed_cell, 2, 2);
+											pylos_AI.black_balls+=1;
+											value+=5;
+											value += maxValue(board, depth, alpha, beta);
+											if (value < beta) {
+												beta = value;
+											}
+											board.insert(removed_cell, 2);
+											board.updateRemovable(removed_cell, 2, 1);
+											pylos_AI.black_balls-=1;
+										}
+									}
+
+									for(int n = 0; n<28; n++) {
+										for(int j = k+1; j<29; j++) {
+											int[] removed_cell_1 = board.intToCoord(n);
+											int[] removed_cell_2 = board.intToCoord(j);
+											if(toremove[n][1] == 2 && toremove[n][0] == 0 && toremove[j][1] == 2 && toremove[j][0] == 0) {
+												value = 0;
+												value = value - 150 - depth;
+												board.remove(removed_cell_1);
+												board.updateRemovable(removed_cell_1, 2, 2);
+												board.remove(removed_cell_2);
+												board.updateRemovable(removed_cell_2, 2, 2);
+												pylos_AI.black_balls+=2;
+												value-=10;
+												value+=maxValue(board, depth, alpha, beta);
+												if(value<beta) {
+													beta = value;
+												}
+												board.insert(removed_cell_1, 2);
+												board.updateRemovable(removed_cell_1, 2, 1);
+												board.insert(removed_cell_2, 2);
+												board.updateRemovable(removed_cell_2, 2, 1);
+												pylos_AI.black_balls-=2;
+											}
+										}
+									}
+									board.insert(current_ball, opponentSymbol);
+									board.updateRemovable(current_ball, 2, 1);
+									board.remove(current_move);
+									board.updateRemovable(current_move, 2, 2);
+									if (beta <= alpha)
+										return beta;
+								}
+								else {
+									value-=100;
+									value += maxValue(board, depth, alpha, beta);
+									if (value < beta)
+										beta = value;
+									board.insert(current_ball, opponentSymbol);
+									board.updateRemovable(current_ball, 2, 1);
+									board.remove(current_move);
+									board.updateRemovable(current_move, 2, 2);
+									if (beta <= alpha) 
+										return beta;
+								}
+							}
+							else {
+								board.remove(current_move);
+								board.updateRemovable(current_move, 2, 2);
+							}
+						}	
+					}
+
+//=============================================================================================================================================
 					board.insert(possib_moves.get(i), opponentSymbol);
 					int[][] toremove = board.updateRemovable(possib_moves.get(i), 2,1);
-					//board.updateRemovable(possib_moves.get(i), 2, 1);
-					//pylos_AI.black_balls-=1;
+//BOARD SQUARE CHECK===========================================================================================================================
 					if(board.isSquare(opponentSymbol, possib_moves.get(i)) || board.isLine(opponentSymbol, possib_moves.get(i))) {
-					//value = value - 80 - depth; //AI will try to block our lines and squares
 						pylos_AI.black_balls-=1;
 						for (int k = 0; k<29; k++) {
 							int[] removed_cell = board.intToCoord(k);
-							if(toremove[k][1] == 2 && toremove[k][2] == 1) {
+							if(toremove[k][1] == 2 && toremove[k][0] == 0) {
 								value = 0;
-								value = value - 200 - depth;
+								value = value - 140 - depth;
 								board.remove(removed_cell);
 								board.updateRemovable(removed_cell, 2, 2);
 								pylos_AI.black_balls+=1;
@@ -301,6 +389,32 @@ public class AIPlayer {
 								pylos_AI.black_balls-=1;
 							}
 						}
+
+						for(int k = 0; k<28; k++) {
+							for(int j = k+1; j<29; j++) {
+								int[] removed_cell_1 = board.intToCoord(k);
+								int[] removed_cell_2 = board.intToCoord(j);
+								if(toremove[k][1] == 2 && toremove[k][0] == 0 && toremove[j][1] == 2 && toremove[j][0] == 0) {
+									value = 0;
+									value = value - 150 - depth;
+									board.remove(removed_cell_1);
+									board.updateRemovable(removed_cell_1, 2, 2);
+									board.remove(removed_cell_2);
+									board.updateRemovable(removed_cell_2, 2, 2);
+									pylos_AI.black_balls+=2;
+									value-=10;
+									value+=maxValue(board, depth, alpha, beta);
+									if(value<beta) {
+										beta = value;
+									}
+									board.insert(removed_cell_1, 2);
+									board.updateRemovable(removed_cell_1, 2, 1);
+									board.insert(removed_cell_2, 2);
+									board.updateRemovable(removed_cell_2, 2, 1);
+									pylos_AI.black_balls-=2;
+								}
+							}
+						}
 						int[] cell_remove = possib_moves.get(i);
 						board.remove(cell_remove);
 						board.updateRemovable(cell_remove, 2, 2);
@@ -309,11 +423,8 @@ public class AIPlayer {
 							return beta;
 					}
 					else {
-				//System.out.println("SIZE MIN: " + possib_moves.size());
-				//board.showBoard();
 						pylos_AI.black_balls-=1;
 						value += maxValue(board, depth, alpha, beta);
-				//System.out.println("VALUEEEEE IN MIN: " + value);
 						if (value < beta)
 							beta = value;
 						int[] cell_remove = possib_moves.get(i);
