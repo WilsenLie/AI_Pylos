@@ -43,12 +43,14 @@
 		do {
 			if(currentPlayer==1) {
 				cell = ai_player.alphaBetaSearch(board);
-				if(up_tier == true && from[0] != 0) {
+				System.out.println("UPTIER: " + up_tier);
+				System.out.println("FROM: " + from[0] + " " + from[1] + " " + from[2]);
+				if(up_tier == true) {
 					board.remove(from);
 					board.updateRemovable(from, 1, 2);
 					board.insert(cell, currentPlayer);
 					board.updateRemovable(cell, 1, 1);
-					System.out.println("AI MOVED UP");
+					System.out.println("AI MOVEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED UP");
 
 					up_tier = false;
 				}
@@ -76,7 +78,7 @@
 				}
 				for(int i = 0; i<29; i++) {
 					for(int j = 0; j<3; j++) {
-						System.out.print(board.removable[i][j]);
+						System.out.print(board.removable[i][j] + "  ");
 					}
 					System.out.println();
 					}
