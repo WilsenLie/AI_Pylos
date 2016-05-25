@@ -438,7 +438,7 @@ public class Board{
 			}
 			return (hor || ver);
 		}
-		else if (findTier > 3) {
+		else if (findTier >= 3) {
 			return false;
 		}
 		return false;
