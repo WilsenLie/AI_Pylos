@@ -22,6 +22,7 @@
 		public static int[] from = {0,0,0};
 
 		public static int currentPlayer;
+		public static int firstPlayer;
 
 		String moveType = "add";
 
@@ -38,7 +39,7 @@
 		int[] cell;
 		instance.greeting();
 		board.possibleMoves();
-		board.showBoard();
+		board.showBoard(firstPlayer);
 
 		do {
 			if(currentPlayer==1) {
@@ -88,8 +89,8 @@
 				instance.makeMove();
 				black_balls-=1;
 			}
-			System.out.println("White Balls: " + white_balls + "; Black Balls: " + black_balls);
-			board.showBoard();
+			System.out.println("AI's Balls: " + white_balls + "; Human's Balls: " + black_balls);
+			board.showBoard(firstPlayer);
 			//for (int i =0; i<29; i++) {
 			//for (int j=0; j<3; j++) {
 				//System.out.print(board.removable[i][j] + ",");
@@ -126,6 +127,7 @@
 					System.out.println("Wrong input! Try again: ");
 				}
 				else {
+					firstPlayer = currentPlayer;
 					temp = true;
 				}
 			}
@@ -145,7 +147,7 @@
 		System.out.println("Time: " + duration);
 		System.out.println();
 
-		board.showBoard();
+		board.showBoard(firstPlayer);
 		
 		System.out.println();
 		System.out.print("Balls remaining: WHITE: " + white_balls + ", BLACK: " + black_balls);
@@ -159,16 +161,22 @@
 		System.out.println("=======The move is in the format: coord1 coord2. If you wish to use new ball type: 0 coord1 \n if you wish to move the ball to upper tier type: coord1 coord2 - where coord1 - ball to move, coord2 - to where you move it");
 		Scanner keyboard = new Scanner(System.in);
 		String move;
-		int[] translated_move_1;
-		int[] translated_move_2;
+		int[] translated_move_1 = {0,0,0};
+		int[] translated_move_2 = {0,0,0};
+		char[] legalAlphabet = {'a','b','c','d','e','f','g','h','i','j'};
+		char[] legalNumber = {'1','2','3','4'};
 		boolean good_move = false;
 		do {
 			System.out.println("Your move: ");
 			move = keyboard.nextLine();
 			String[] splited = move.split("\\s+");
 			System.out.println(splited[0] + " +++++ " + splited[1]);
+			if (splited.length < 2 || splited.length > 2) {
+				System.out.println("Wrong input");
+				continue;
+			}
 		//if(splited[0].equals("0")) {System.out.println("ZEROOOOOOO");}
-			if(splited[0].equals("0")) {
+			else if(splited[0].equals("0") && Arrays.binarySearch(legalAlphabet, splited[1].charAt(0)) >= 0 && Arrays.binarySearch(legalNumber, splited[1].charAt(1)) >= 0) {
 				translated_move_2 = board.transCoordinate(splited[1]);
 
 				if(board.legalMove(translated_move_2)) {
@@ -180,7 +188,7 @@
 					System.out.println("Cell is occupied");
 				}
 			}
-			else { // move up - works
+			else if (Arrays.binarySearch(legalAlphabet, splited[0].charAt(0)) >= 0 && Arrays.binarySearch(legalNumber, splited[0].charAt(1)) >= 0 && Arrays.binarySearch(legalAlphabet, splited[1].charAt(0)) >= 0 && Arrays.binarySearch(legalNumber, splited[1].charAt(1)) >= 0) { // move up - works
 				translated_move_1 = board.transCoordinate(splited[0]);
 				translated_move_2 = board.transCoordinate(splited[1]);
 				board.remove(translated_move_1);
@@ -190,6 +198,10 @@
 				System.out.println("YOU MOVED BALL TO UPPER TIER");
 				good_move = true;
 			}
+			else {
+				System.out.println("Wrong input");
+				continue;
+			}
 		}
 		while(good_move != true);
 
@@ -198,12 +210,26 @@
 		if (move.charAt(0) != 'h' && move.charAt(0) != 'i' && move.charAt(0) != 'j'){
 			if (board.isLine(currentPlayer, translated_move_2) || board.isSquare(currentPlayer, translated_move_2)) {
 				//remove balls here
+				int balls_to_remove = 0;
 				System.out.println("FOUND a line or square!!");
-				System.out.println("How many balls you want to remove (1 or 2): ");
-				int balls_to_remove = keyboard.nextInt();
+				boolean temp1 = false;
+				while (temp1 != true) {
+					System.out.println("How many balls you want to remove (1 or 2): ");
+					balls_to_remove = keyboard.nextInt();
+					if (balls_to_remove == 1 || balls_to_remove == 2) {
+						temp1 = true;
+						continue;
+					}
+					System.out.println ("Wrong input");
+				}
 				for(int i = 1; i<=balls_to_remove; i++) {
 					System.out.println("Ball to remove number " + i + ": ");
 					String remove = keyboard.next();
+					if (Arrays.binarySearch(legalAlphabet,remove.charAt(0)) < 0 || Arrays.binarySearch(legalNumber,remove.charAt(1)) < 0) {
+						System.out.println("Wrong input");
+						i--;
+						continue;
+					}
 					int[] translated_remove = board.transCoordinate(remove);
 					board.remove(translated_remove);
 					board.updateRemovable(translated_remove, 2, 2);
