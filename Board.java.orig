@@ -12,6 +12,7 @@ public class Board{
 	public int tier_4[][] = new int[1][1];
 	
 	private static int[][] tier1_evaluationTable = {{3, 4, 4, 3,}, 
+<<<<<<< HEAD
 													{4, 15, 15, 4},
 													{4, 15, 15, 4}, 
 													{3, 4, 4, 3}};
@@ -22,6 +23,7 @@ public class Board{
 	
     private static int[][] tier3_evaluationTable = {{12, 12}, 
 													{12, 12}};
+=======
 	{4, 15, 15, 4},
 	{4, 15, 15, 4}, 
 	{3, 4, 4, 3}};
@@ -32,6 +34,7 @@ public class Board{
 	
 	private static int[][] tier3_evaluationTable = {{12, 12}, 
 	{12, 12}};
+>>>>>>> 60041b3db0f1e4bcd54f903c68ab30a41fb2cb7b
 	
 	//Board constructor
 	public Board() {
