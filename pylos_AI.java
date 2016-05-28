@@ -86,7 +86,6 @@
 			}
 			else {
 				instance.makeMove();
-				black_balls-=1;
 			}
 			System.out.println("White Balls: " + white_balls + "; Black Balls: " + black_balls);
 			board.showBoard();
@@ -175,6 +174,7 @@
 					board.insert(translated_move_2, currentPlayer);
 					board.updateRemovable(translated_move_2, 2, 1);
 					good_move = true;
+					black_balls-=1;
 				}
 				else {
 					System.out.println("Cell is occupied");

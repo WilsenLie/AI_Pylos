@@ -12,16 +12,16 @@ public class Board{
 	public int tier_4[][] = new int[1][1];
 	
 	private static int[][] tier1_evaluationTable = {{3, 4, 4, 3,}, 
-		{4, 15, 15, 4},
-		{4, 15, 15, 4}, 
-	{3, 4, 4, 3}};
+													{4, 15, 15, 4},
+													{4, 15, 15, 4}, 
+													{3, 4, 4, 3}};
 	
     private static int[][] tier2_evaluationTable = {{10, 11, 10}, 
-		{11, 50, 11},
-	{10, 11, 10}};
+													{11, 20, 11},
+													{10, 11, 10}};
 	
     private static int[][] tier3_evaluationTable = {{12, 12}, 
-	{12, 12}};
+													{12, 12}};
 	
 	//Board constructor
 	public Board() {
