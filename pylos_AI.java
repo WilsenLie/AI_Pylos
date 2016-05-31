@@ -1,6 +1,7 @@
 /*
 	*pylos_AI.java
-	*@author Evgeny Rogozik and Wilsen Lie
+	*Evgeny Rogozik - 21177069
+	*Wilsen Lie - 21105559
 	*This is the implementation of Minimax algorithm with alpha beta pruning
 */
 
