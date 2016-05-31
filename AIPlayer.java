@@ -19,7 +19,7 @@ public class AIPlayer {
 
 	private int maxValue(Board board, int depth, int alpha, int beta) {
 		//check if the board is in a terminal (winning) state and
-		//return the maximum or minimum utility value (255 - depth or 
+		//return the maximum or minimum utility value (2505 - depth or 
 		//0 + depth) if the max player or min player is winning.
 		//System.out.println("MAX started");
 		if (board.isWin() != 0) {
@@ -38,34 +38,29 @@ public class AIPlayer {
 		possib_moves = board.possibleMoves();
 		int[] test = possib_moves.get(0);
 		for (int i = 0; i<possib_moves.size(); i++) { 
-			//System.out.println("STARTER LOOPING POSSIBLE MOVES");
 			int value = 0;
-
 			int[] current_move = possib_moves.get(i);
 //MOVE UP CHECK===================================================================================================================================
-			if (current_move[0] == 2 || current_move[0] == 3) {
-				value+=100;
+			if (current_move[0] == 2 || current_move[0] == 3) {//only if move is on tier 2 or tier 3
+				value-=80;
 				board.insert(current_move, mySymbol);
 				int[][] temp_rem = board.updateRemovable(current_move, 1, 1);
 				board.remove(current_move);
 				board.updateRemovable(current_move, 1, 2);
 				for(int k = 0; k<29; k++) {
 					board.insert(current_move, mySymbol);
-					board.updateRemovable(current_move, 1, 1);
+					board.updateRemovable(current_move, 1, 1);//insert and update the removeable balls first.
 					int[] current_ball = board.intToCoord(k);
-					if(board.removable[k][1] == 1 && board.removable[k][0] == 0 && current_ball[0] == current_move[0]-1) {
+					if(board.removable[k][1] == 1 && board.removable[k][0] == 0 && current_ball[0] == current_move[0]-1) {//check which balls are removeable
 						current_ball = board.intToCoord(k);
-						if(depth==1) {
-							System.out.println("BALL: " + current_ball[0] + " " + current_ball[1] + " " + current_ball[2]);
-						}
-						board.remove(current_ball);
+						board.remove(current_ball);//remove the ball (so it looks like it is moved up) and do the rest of the algorithm to get the value of the board state.
 						int[][] toremove = board.updateRemovable(current_ball, 1, 2);
-						if(board.isSquare(mySymbol, current_move) || board.isLine(mySymbol, current_move)) {
-							for(int n = 0; n<29; n++) {
+						if(board.isSquare(mySymbol, current_move) || board.isLine(mySymbol, current_move)) {//if found line or square
+							for(int n = 0; n<29; n++) {//check all possible removals of ONE ball
 								int[] removed_cell = board.intToCoord(n);
 								if(toremove[n][1] == 1 && toremove[n][0]==0) {
-									value = 0;
-									value = value + 150- depth; //AI creating a its own square or line
+									value = 5;
+									value = value + 15- depth; //AI creating a its own square or line
 									board.remove(removed_cell);
 									board.updateRemovable(removed_cell, 1, 2);
 									pylos_AI.white_balls+=1;
@@ -74,8 +69,7 @@ public class AIPlayer {
 									if (value > alpha) {
 										alpha = value;
 										cell = current_move;
-										if(depth == 1) {
-											System.out.println("Move up rem1: " + value);
+										if(depth == 1) {//if get highest value in depth 1 that means this remove is the best choice for the next move.
 											pylos_AI.up_tier = true;
 											pylos_AI.from = current_ball;
 											pylos_AI.cell_to_remove_1 = removed_cell;
@@ -87,13 +81,13 @@ public class AIPlayer {
 								}
 							}
 
-							for(int n = 0; n<28; n++) {
+							for(int n = 0; n<28; n++) {//check removals of all possible combinations of TWO balls
 								for(int j = n+1; j<29; j++) {
 									int[] removed_cell_1 = board.intToCoord(n);
 									int[] removed_cell_2 = board.intToCoord(j);
 									if(toremove[n][1] == 1 && toremove[n][0]==0 && toremove[j][1] == 1 && toremove[j][0] == 0) {
-										value = 0;
-										value = value + 150- depth; //if for AI creating a its own square or line is more important
+										value = 10;
+										value = value + 20- depth; //if for AI creating a its own square or line is more important
 										board.remove(removed_cell_1);
 										board.updateRemovable(removed_cell_1, 1, 2);
 										board.remove(removed_cell_2);
@@ -104,8 +98,7 @@ public class AIPlayer {
 										if (value > alpha) {
 											alpha = value;
 											cell = current_move;
-											if(depth == 1) {
-												System.out.println("Move up rem2: " + value);
+											if(depth == 1) {//if get highest value in depth 1 that means these removes are the best choice for the next move.
 												pylos_AI.up_tier = true;
 												pylos_AI.from = current_ball;
 												pylos_AI.cell_to_remove_1 = removed_cell_1;
@@ -120,8 +113,6 @@ public class AIPlayer {
 									}
 								}
 							}
-							//board.remove(current_move);
-							//board.updateRemovable(current_move, 1, 2);
 							board.insert(current_ball, mySymbol);
 							board.updateRemovable(current_ball, 1, 1);
 							board.remove(current_move);
@@ -130,7 +121,7 @@ public class AIPlayer {
 								return alpha;
 						}
 						else {
-							value+=3000;
+							value=10;
 							value += minValue(board, depth, alpha, beta);
 							if (value > alpha) {
 								alpha = value;
@@ -138,11 +129,7 @@ public class AIPlayer {
 								if(depth == 1) {
 									pylos_AI.up_tier = true;
 									pylos_AI.from = current_ball;
-									System.out.println("Move up else: " + value);
 								}
-								int[] blah = {0,0,0};
-								pylos_AI.cell_to_remove_1 = blah;
-								pylos_AI.cell_to_remove_2 = blah;
 							}
 							board.insert(current_ball, mySymbol);
 							board.updateRemovable(current_ball, 1, 1);
@@ -150,15 +137,13 @@ public class AIPlayer {
 							board.updateRemovable(current_move, 1, 2);
 							if (alpha >= beta) 
 								return alpha;
-						}//====================================================
+						}
 					}
 					else {
 						board.remove(current_move);
 						board.updateRemovable(current_move, 1, 2);
 					}
 				}
-				//board.remove(current_move);
-				//board.updateRemovable(current_move, 1, 2);
 			}
 //====================================================================================================================================
 			board.insert(possib_moves.get(i), mySymbol);
@@ -169,15 +154,14 @@ public class AIPlayer {
 				for(int k = 0; k<29; k++) {
 					int[] removed_cell = board.intToCoord(k);
 					if(toremove[k][1] == 1 && toremove[k][0]==0) {
-						value = 0;
-							value = value + 500- depth; //if for AI creating a its own square or line is more important
+						value = 25;
+						value = value + 15- depth; //AI creating a its own square or line
 							board.remove(removed_cell);
 							board.updateRemovable(removed_cell, 1, 2);
 							pylos_AI.white_balls+=1;
 							value+=5;
 							value += minValue(board, depth, alpha, beta);
 							if (value > alpha) {
-								//System.out.println("SET ALPHA TO: " + value);
 								alpha = value;
 								cell = possib_moves.get(i);
 								if(depth == 1) {
@@ -190,7 +174,6 @@ public class AIPlayer {
 							board.updateRemovable(removed_cell, 1, 1);
 							pylos_AI.white_balls-=1;
 						}
-						//System.out.println("I WANT TO REMOVE: {" + removed_cell[0] + " " + removed_cell[1] + " " + removed_cell[2]);
 					}
 					
 					for(int k = 0; k<28; k++) {
@@ -198,8 +181,8 @@ public class AIPlayer {
 							int[] removed_cell_1 = board.intToCoord(k);
 							int[] removed_cell_2 = board.intToCoord(j);
 							if(toremove[k][1] == 1 && toremove[k][0]==0 && toremove[j][1] == 1 && toremove[j][0] == 0) {
-								value = 0;
-								value = value + 700- depth; //if for AI creating a its own square or line is more important
+								value = 30;
+								value = value + 20- depth; //AI creating a its own square or line
 								board.remove(removed_cell_1);
 								board.updateRemovable(removed_cell_1, 1, 2);
 								board.remove(removed_cell_2);
@@ -208,7 +191,6 @@ public class AIPlayer {
 								value+=10;
 								value += minValue(board, depth, alpha, beta);
 								if (value > alpha) {
-									//System.out.println("SET ALPHA TO: " + value);
 									alpha = value;
 									cell = possib_moves.get(i);
 									if(depth == 1) {
@@ -223,7 +205,6 @@ public class AIPlayer {
 								board.updateRemovable(removed_cell_2, 1, 1);
 								pylos_AI.white_balls-=2;
 							}
-						//System.out.println("I WANT TO REMOVE: {" + removed_cell[0] + " " + removed_cell[1] + " " + removed_cell[2]);
 						}
 					}
 					int[] cell_remove = possib_moves.get(i);
@@ -232,25 +213,14 @@ public class AIPlayer {
 					pylos_AI.white_balls+=1;
 					if (alpha >= beta) 
 						return alpha;
-					//System.out.println("VALUE IN AI SQUARE: " + value);
-					//nested loop here to check possible remove combos of two balls
 				}
 //-=================================================================================================================================================
 				else {
-					//board.insert(possib_moves.get(i), mySymbol);
-					//board.updateRemovable(possib_moves.get(i), 1, 1);
 					pylos_AI.white_balls-=1;
 					value += minValue(board, depth, alpha, beta);
 					if (value > alpha) {
-						System.out.println("Just else: " + value);
 						alpha = value;
 						cell = possib_moves.get(i);
-						int[] blah = {0,0,0};
-						pylos_AI.cell_to_remove_1 = blah;
-						pylos_AI.cell_to_remove_2 = blah;
-						//if(depth==1)
-							//pylos_AI.up_tier = false;
-						//pylos_AI.from = blah;
 					}
 					int[] cell_remove = possib_moves.get(i);
 					board.remove(cell_remove);
@@ -260,16 +230,14 @@ public class AIPlayer {
 						return alpha;
 				}
 			}
-		//System.out.println("FINAL ALPHA: " + alpha);
 			maxCell = cell;
 			return alpha;
 		}
 
 		private int minValue(Board board, int depth, int alpha, int beta) {
 		//check if the board is in a terminal (winning) state and
-		//return the maximum or minimum utility value (255 - depth or 
+		//return the maximum or minimum utility value (2505 - depth or 
 		//0 + depth) if the max player or min player is winning.
-		//System.out.println("MIN started");
 			if (board.isWin() != 0)
 				if (board.isWin() == mySymbol)
 					return 2505 - depth;
@@ -283,11 +251,10 @@ public class AIPlayer {
 				possib_moves = board.possibleMoves();
 				for (int i = 0; i < possib_moves.size(); i++) {
 					int value = 0;
-
 					int[] current_move = possib_moves.get(i);
 //MOVE UP CHECK================================================================================================================================
 					if(current_move[0] == 2 || current_move[0] == 3) {
-						value-=100;
+						value-=10;
 						board.insert(current_move, opponentSymbol);
 						int[][] temp_rem = board.updateRemovable(current_move, 2, 1);
 						board.remove(current_move);
@@ -305,7 +272,7 @@ public class AIPlayer {
 										int[] removed_cell = board.intToCoord(n);
 										if(toremove[n][1] == 2 && toremove[n][0] == 0) {
 											value = 0;
-											value = value - 140 - depth;
+											value = value - 14 - depth;
 											board.remove(removed_cell);
 											board.updateRemovable(removed_cell, 2, 2);
 											pylos_AI.black_balls+=1;
@@ -326,7 +293,7 @@ public class AIPlayer {
 											int[] removed_cell_2 = board.intToCoord(j);
 											if(toremove[n][1] == 2 && toremove[n][0] == 0 && toremove[j][1] == 2 && toremove[j][0] == 0) {
 												value = 0;
-												value = value - 150 - depth;
+												value = value - 15 - depth;
 												board.remove(removed_cell_1);
 												board.updateRemovable(removed_cell_1, 2, 2);
 												board.remove(removed_cell_2);
@@ -353,7 +320,7 @@ public class AIPlayer {
 										return beta;
 								}
 								else {
-									value-=100;
+									value-=10;
 									value += maxValue(board, depth, alpha, beta);
 									if (value < beta)
 										beta = value;
@@ -381,12 +348,11 @@ public class AIPlayer {
 						for (int k = 0; k<29; k++) {
 							int[] removed_cell = board.intToCoord(k);
 							if(toremove[k][1] == 2 && toremove[k][0] == 0) {
-								value = 0;
-								value = value - 7000 - depth;
+								value = -25;
+								value = value - 40 + depth;
 								board.remove(removed_cell);
 								board.updateRemovable(removed_cell, 2, 2);
 								pylos_AI.black_balls+=1;
-								value+=5;
 								value += maxValue(board, depth, alpha, beta);
 								if (value < beta) {
 									beta = value;
@@ -402,14 +368,13 @@ public class AIPlayer {
 								int[] removed_cell_1 = board.intToCoord(k);
 								int[] removed_cell_2 = board.intToCoord(j);
 								if(toremove[k][1] == 2 && toremove[k][0] == 0 && toremove[j][1] == 2 && toremove[j][0] == 0) {
-									value = 0;
-									value = value - 7000 - depth;
+									value = -30;
+									value = value - 50 + depth;
 									board.remove(removed_cell_1);
 									board.updateRemovable(removed_cell_1, 2, 2);
 									board.remove(removed_cell_2);
 									board.updateRemovable(removed_cell_2, 2, 2);
 									pylos_AI.black_balls+=2;
-									value-=10;
 									value+=maxValue(board, depth, alpha, beta);
 									if(value<beta) {
 										beta = value;
@@ -444,5 +409,4 @@ public class AIPlayer {
 				}
 				return beta;
 			}
-
 		}
